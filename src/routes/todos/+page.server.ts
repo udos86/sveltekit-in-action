@@ -7,7 +7,5 @@ export const load = (async ({ fetch }) => {
   const response = await fetch(url);
   const todos = await response.json() as Todo[];
 
-  console.log(todos);
- 
   return { todos };
 }) satisfies PageServerLoad;
