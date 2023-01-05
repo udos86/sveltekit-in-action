@@ -1,10 +1,13 @@
 import { error } from '@sveltejs/kit';
+import { isAuthenticated } from '$lib/auth/guards';
 import type { Prisma, Todo } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
 
 const url = '/api/todos';
 
-export const load = (async ({ fetch, params }) => {
+export const load: PageServerLoad = (async ({ fetch, params, parent }) => {
+  await isAuthenticated(parent);
+
   const response = await fetch(`${url}/${params.id}`);
   const data: Todo | Error = await response.json();
 
@@ -14,7 +17,7 @@ export const load = (async ({ fetch, params }) => {
   }
 
   return { todo: data as Todo };
-}) satisfies PageServerLoad;
+});
 
 export const actions: Actions = {
   default: async ({ fetch, request }) => {

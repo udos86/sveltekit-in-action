@@ -1,7 +1,13 @@
-import type { Prisma, Todo } from '@prisma/client';
+import { isAuthenticated } from '$lib/auth/guards';
+import type { Prisma } from '@prisma/client';
+import type { PageServerLoad } from '../$types';
 import type { Actions } from './$types';
 
 const url = '/api/todos';
+
+export const load: PageServerLoad = async ({ parent }) => {
+  await isAuthenticated(parent);
+};
 
 export const actions: Actions = {
   default: async ({ fetch, request }) => {
