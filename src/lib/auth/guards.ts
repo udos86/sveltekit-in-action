@@ -10,4 +10,4 @@ export const isAuthenticated = async (parent: ParentDataFn) => {
     if (session?.user === undefined) {
         throw error(401, { message: 'You are not logged in.' });
     }
-}
+};

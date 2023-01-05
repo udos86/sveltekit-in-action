@@ -4,9 +4,9 @@ import type { RequestHandler } from './$types';
 
 const prisma = new PrismaClient();
 
-export const GET = (async ({ params }) => {
+export const GET: RequestHandler = (async ({ params }) => {
   const todo = await prisma.todo.findUnique({
-    where: { id: params.id },
+    where: { id: params.id }
   });
 
   if (todo === null) {
@@ -14,10 +14,9 @@ export const GET = (async ({ params }) => {
   }
 
   return json(todo);
+});
 
-}) satisfies RequestHandler;
-
-export const PUT = (async ({ params, request }) => {
+export const PUT: RequestHandler = (async ({ params, request }) => {
   const data: Prisma.TodoUpdateInput = await request.json();
 
   try {
@@ -25,10 +24,8 @@ export const PUT = (async ({ params, request }) => {
       where: { id: params.id },
       data
     });
-
     return json(updatedTodo);
   } catch (err) {
     throw error(404, { message: `Todo with id ${params.id} not found` });
   }
-
-}) satisfies RequestHandler;
+});
