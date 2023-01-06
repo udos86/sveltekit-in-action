@@ -4,22 +4,29 @@ const prisma = new PrismaClient();
 
 async function main() {
 
-  const data = [
-    { "text": "Kranplätze verdichten", "done": false },
-    { "text": "Nach Wacken fahren", "done": false },
-    { "text": "Chaos in Ordnung bringen", "done": false },
-    { "text": "Vortrag halten", "done": true },
-    { "text": "Urlaub buchen", "done": false }
+  const testUser = { id: '4711', name: 'John Doe' };
+
+  await prisma.user.upsert({
+    where: { id: testUser.id },
+    update: {},
+    create: { id: testUser.id, name: testUser.name }
+  });
+
+  const todos = [
+    { text: "Kranplätze verdichten", done: false },
+    { text: "Nach Wacken fahren", done: false },
+    { text: "Chaos in Ordnung bringen", done: false },
+    { text: "Vortrag halten", done: true },
+    { text: "Urlaub buchen", done: false }
   ];
 
-  for (const item of data) {
-    const { text, done } = item;
-    const todo = await prisma.todo.upsert({
+  for (const todo of todos) {
+    const { text, done } = todo;
+    await prisma.todo.upsert({
       where: { text },
       update: {},
-      create: { text, done }
+      create: { text, done, user: { connect: { id: testUser.id } } }
     });
-    console.log(todo);
   }
 }
 

@@ -11,7 +11,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"prisma:init": "npx prisma migrate dev --name init"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -40,6 +41,7 @@
 	"dependencies": {
 		"@auth/core": "^0.2.5",
 		"@auth/sveltekit": "^0.1.12",
+		"@next-auth/prisma-adapter": "^1.0.5",
 		"@prisma/client": "^4.8.0"
 	},
 	"prisma": {

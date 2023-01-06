@@ -17,7 +17,6 @@
 </script>
 
 <header>
-
 	<h1>SvelteKit Demo {$count}</h1>
 
 	{#if data.session}
@@ -39,7 +38,6 @@
 		<a href="/">Home</a>
 		<a href="/todos">Todos</a>
 	</nav>
-
 </header>
 
 <main class="space-y-4">
