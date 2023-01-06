@@ -3,10 +3,10 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import TodoForm from '../todo-form.svelte';
 	import CountIncrementer from '../../../count-incrementer.svelte';
-	import type { /*ActionData,*/ PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 
 	export let data: PageData;
-	// export let form: ActionData;
+	export let form: ActionData;
 
 	let editable = false;
 
@@ -27,6 +27,7 @@
 	<form method="POST" use:enhance={onSubmit}>
 		<TodoForm todo={data.todo} />
 	</form>
+	<p>{JSON.stringify(form)}</p>
 {:else}
 	<p>{data.todo.text}</p>
 {/if}

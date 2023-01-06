@@ -21,14 +21,14 @@ export const actions: Actions = {
       done: Boolean(formData.get('done') as string)
     };
 
-    const data = await fetch(url, {
+    await fetch(url, {
       method: 'POST',
       body: JSON.stringify(body),
       headers: {
         'content-type': 'application/json'
       }
-    }).then(response => response.json());
+    });
 
-    return { data };
+    return {isCreated: true};
   }
 };

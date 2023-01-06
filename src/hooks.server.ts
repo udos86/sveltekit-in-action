@@ -5,9 +5,7 @@ import GitHub from "@auth/core/providers/github";
 import { PrismaClient } from "@prisma/client";
 import { GITHUB_ID, GITHUB_SECRET } from "$env/static/private";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import type { User } from "@auth/core/types";
-import type { AdapterUser } from "@auth/core/adapters";
-import { isAuthenticated } from "$lib/auth";
+import { getUser, isAuthenticated } from "$lib/auth";
 
 const prisma = new PrismaClient();
 
@@ -20,15 +18,6 @@ const authGuard: Handle = async ({ event, resolve }) => {
   }
 
   return await resolve(event);
-}
-
-// see https://stackoverflow.com/questions/69068495/how-to-get-the-provider-access-token-in-next-auth
-const getProviderAccessToken = async (user: User | AdapterUser): Promise<string | null> => {
-  const account = await prisma.account.findFirst({
-    where: { userId: user.id }
-  });
-
-  return account === null ? null : account.access_token;
 }
 
 export const handle = sequence(
@@ -59,9 +48,11 @@ export const handle = sequence(
     ],
     callbacks: {
       async session({ session, user }) {
+        /*
         if (session.user !== undefined) {
           session.user.id = user.id;
         }
+        */
         return session;
       }
     }
@@ -72,7 +63,15 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
   const session = await event.locals.getSession();
   isAuthenticated(session);
 
-  request.headers.set('custom-user-id', session!.user!.id!);
+  // get user id via extented sessin user object via session callback and propagate via custom HTTP header
+  // request.headers.set('x-user-id', session!.user!.id!);
+
+  // setting user id on locals won't work as it is not populated in endpoint
+  // event.locals.userId = user?.id;
+
+  // get user id via Prisma database lookup
+  const user = await getUser(prisma, session!.user);
+  request.headers.set('x-user-id', user?.id!);
 
   return fetch(request);
 };

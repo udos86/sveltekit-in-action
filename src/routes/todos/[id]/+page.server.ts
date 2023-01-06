@@ -32,12 +32,12 @@ export const actions: Actions = {
       done: Boolean(formData.get('done') as string)
     };
 
-    const data = await fetch(`${url}/${todoId}`, {
+    await fetch(`${url}/${todoId}`, {
       method: 'PUT',
       body: JSON.stringify(body),
       headers: { 'content-type': 'application/json' }
-    }).then(response => response.json());
+    });
 
-    return { data };
+    return {isUpdated: true};
   }
 };

@@ -10,22 +10,32 @@ export const GET: RequestHandler = (async ({ locals, request }) => {
   const session = await locals.getSession();
   isAuthenticated(session);
 
-  const userId = request.headers.get('custom-user-id') as string;
-
+  const userId = request.headers.get('x-user-id') as string;
+  /*
   const todos = await prisma.todo.findMany({
     where: { userId },
     orderBy: { updatedAt: 'desc' },
     select: todoSelect
   });
-
-  return json(todos);
+  */
+  const result = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      todos: {
+        orderBy: { updatedAt: 'desc' },
+        select: todoSelect
+      }
+    }
+  });
+  
+  return json(result?.todos);
 });
 
 export const POST: RequestHandler = (async ({ locals, request }) => {
   const session = await locals.getSession();
   isAuthenticated(session);
 
-  const userId = request.headers.get('custom-user-id') as string;
+  const userId = request.headers.get('x-user-id') as string;
   const data: Prisma.TodoCreateWithoutUserInput = await request.json();
 
   const todo = await prisma.todo.create({
