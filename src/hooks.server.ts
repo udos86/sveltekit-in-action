@@ -5,7 +5,6 @@ import GitHub from "@auth/core/providers/github";
 import { PrismaClient } from "@prisma/client";
 import { GITHUB_ID, GITHUB_SECRET } from "$env/static/private";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { getUser, isAuthenticated } from "$lib/auth";
 
 const prisma = new PrismaClient();
 
@@ -55,11 +54,12 @@ export const handle = sequence(
         */
         return session;
       }
-    }
+    },
   })
 );
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
+  /*
   const session = await event.locals.getSession();
   isAuthenticated(session);
 
@@ -72,6 +72,6 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
   // get user id via Prisma database lookup
   const user = await getUser(prisma, session!.user);
   request.headers.set('x-user-id', user?.id!);
-
+  */
   return fetch(request);
 };

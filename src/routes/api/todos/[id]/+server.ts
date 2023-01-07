@@ -6,19 +6,14 @@ import { todoSelect } from '$lib/prisma';
 
 const prisma = new PrismaClient();
 
-export const GET: RequestHandler = (async ({ locals, params, request }) => {
+export const GET: RequestHandler = (async ({ locals, params }) => {
   const session = await locals.getSession();
   isAuthenticated(session);
 
-  const userId = request.headers.get('x-user-id') as string;
   const todo = await prisma.todo.findFirst({
-    where: { id: params.id, userId },
+    where: { id: params.id, user: { email: session!.user!.email! } },
     select: todoSelect
-  });
-
-  if (todo === null) {
-    throw error(404, { message: `Todo with id ${params.id} not found` });
-  }
+  })
 
   return json(todo);
 });
@@ -28,11 +23,10 @@ export const PUT: RequestHandler = (async ({ locals, params, request }) => {
   isAuthenticated(session);
 
   const data: Prisma.TodoUpdateInput = await request.json();
-  const userId = request.headers.get('x-user-id') as string;
 
   try {
     await prisma.user.update({
-      where: { id: userId },
+      where: { email: session!.user!.email! },
       data: {
         todos: {
           update: {

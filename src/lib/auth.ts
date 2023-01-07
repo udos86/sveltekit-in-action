@@ -4,7 +4,7 @@ import type { Prisma, PrismaClient, User } from "@prisma/client";
 import type { AdapterUser } from "@auth/core/adapters";
 
 export const isAuthenticated = (session: Session | null): void | never => {
-    if (session === null || session.user === undefined) {
+    if (session === null || session.user === undefined || session.user.email === null) {
         throw error(401, { message: 'You are not logged in.' });
     }
 };
