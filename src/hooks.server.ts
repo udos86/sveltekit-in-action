@@ -8,6 +8,12 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 const prisma = new PrismaClient();
 
+const logHandle: Handle = async ({ event, resolve }) => {
+  console.log(event.url.href);
+  return await resolve(event);
+}
+
+
 const authGuard: Handle = async ({ event, resolve }) => {
   if (event.url.pathname.includes('/todos')) {
     const session = await event.locals.getSession();
@@ -53,6 +59,10 @@ export const handle = sequence(
         }
         */
         return session;
+      },
+      async redirect({baseUrl, url}) {
+        console.log(baseUrl, url);
+        return url;
       }
     },
   })

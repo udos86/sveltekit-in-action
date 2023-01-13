@@ -29,6 +29,6 @@ export const actions: Actions = {
       }
     });
 
-    return {isCreated: true};
+    return {success: true};
   }
 };

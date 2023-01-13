@@ -1,18 +1,19 @@
 <script lang="ts">
-	import TodoForm from '../todo-form.svelte';
-	import CountIncrementer from '../../../count-incrementer.svelte';
-	// import type { ActionData } from './$types';
-	import { page } from '$app/stores';
+	import TodoForm from '$lib/todo-form.svelte';
+	import type { ActionData } from './$types';
 	import { enhance } from '$app/forms';
 
-	// export let form: ActionData;
+	export let form: ActionData;
 </script>
 
-<h1>Add Todo</h1>
+<h2>Add Todo</h2>
 <form method="POST" use:enhance>
 	<TodoForm />
+	<button class="primary-button">Save</button>
 </form>
 
-<p>{JSON.stringify($page.form)}</p>
+{#if form}
+	<p>{JSON.stringify(form)}</p>
+{/if}
 
-<CountIncrementer />
+<!--CountIncrementer /-->

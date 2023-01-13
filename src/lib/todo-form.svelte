@@ -10,16 +10,11 @@
 </script>
 
 {#if todo}
-	<input type="hidden" name="id" value={todo.id} />
+	<input type="hidden" name="todoId" value={todo.id} />
 {/if}
 
-<label for="text">Title:</label>
-<input name="text" bind:value={formModel.text} />
+<label for="text">Text</label>
+<input type="text" name="text" bind:value={formModel.text} />
 
 <label for="done">Done:</label>
 <input name="done" type="checkbox" bind:checked={formModel.done} value={formModel.done} />
-
-<button>Save</button>
-
-<style>
-</style>

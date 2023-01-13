@@ -1,6 +1,6 @@
-import { error, redirect } from '@sveltejs/kit';
-import { isAuthenticated } from '$lib/auth';
-import type { Todo } from '@prisma/client';
+import { isAuthenticated } from "$lib/auth";
+import { error } from "@sveltejs/kit";
+import type { Prisma, Todo } from "@prisma/client";
 import type { Actions, PageServerLoad } from './$types';
 
 const url = '/api/todos';
@@ -21,15 +21,23 @@ export const load: PageServerLoad = (async ({ fetch, locals, params }) => {
 });
 
 export const actions: Actions = {
-  delete: async ({ fetch, locals, request }) => {
+  default: async ({ fetch, locals, request }) => {
     const session = await locals.getSession();
     isAuthenticated(session);
 
     const formData = await request.formData();
     const todoId = formData.get('todoId');
+    const body: Prisma.TodoUpdateWithoutUserInput = {
+      text: formData.get('text') as string,
+      done: Boolean(formData.get('done') as string)
+    };
 
-    await fetch(`${url}/${todoId}`, { method: 'DELETE' });
+    await fetch(`${url}/${todoId}`, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+      headers: { 'content-type': 'application/json' }
+    });
 
-    throw redirect(302, '/todos');
+    return { success: true };
   }
 };
