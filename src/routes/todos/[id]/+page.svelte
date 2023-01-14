@@ -16,6 +16,6 @@
 	</form>
 </header>
 
-<p>{data.todo.text}</p>
+<p class:done-todo={data.todo.done}>{data.todo.text}</p>
 
 <!--CountIncrementer /-->
