@@ -27,6 +27,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
 
 export const handle = sequence(
   SvelteKitAuth({
+    trustHost: true,
     // @ts-ignore
     adapter: PrismaAdapter(prisma),
     session: {
