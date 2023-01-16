@@ -1,3 +1,0 @@
-[functions]
-  external_node_modules = ["@prisma/client"]
-  node_bundler = "esbuild"
