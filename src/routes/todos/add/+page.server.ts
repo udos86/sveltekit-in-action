@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client';
-import { isAuthenticated } from '$lib/auth';
+import { isAuthenticated } from '$lib/auth/guards';
 import type { PageServerLoad } from '../$types';
 import type { Actions } from './$types';
 

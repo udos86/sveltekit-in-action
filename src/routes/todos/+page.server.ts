@@ -1,6 +1,6 @@
 import type { Todo } from '@prisma/client';
 import type { PageServerLoad } from './$types';
-import { isAuthenticated } from '$lib/auth';
+import { isAuthenticated } from '$lib/auth/guards';
 
 const url = '/api/todos';
 

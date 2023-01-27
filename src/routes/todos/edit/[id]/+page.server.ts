@@ -1,4 +1,4 @@
-import { isAuthenticated } from "$lib/auth";
+import { isAuthenticated } from "$lib/auth/guards";
 import { error } from "@sveltejs/kit";
 import type { Prisma, Todo } from "@prisma/client";
 import type { Actions, PageServerLoad } from './$types';

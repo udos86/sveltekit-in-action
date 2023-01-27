@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
-import { isAuthenticated } from '$lib/auth';
+import { isAuthenticated } from '$lib/auth/guards';
 import type { Todo } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
 

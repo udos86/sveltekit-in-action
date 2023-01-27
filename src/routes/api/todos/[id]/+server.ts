@@ -1,8 +1,8 @@
 import { error, json } from '@sveltejs/kit';
 import { Prisma, PrismaClient } from '@prisma/client';
 import type { RequestHandler } from './$types';
-import { isAuthenticated } from '$lib/auth';
-import { todoSelect } from '$lib/prisma';
+import { isAuthenticated } from '$lib/auth/guards';
+import { todoSelect } from '$lib/db/prisma';
 
 const prisma = new PrismaClient();
 
@@ -43,7 +43,6 @@ export const PUT: RequestHandler = (async ({ locals, params, request }) => {
 });
 
 export const DELETE: RequestHandler = (async ({ locals, params }) => {
-  console.log('DELETE');
   const session = await locals.getSession();
   isAuthenticated(session);
 

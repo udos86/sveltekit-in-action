@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TodoForm from '$lib/todo-form.svelte';
+	import TodoForm from '$lib/ui/todo-form.svelte';
 	import type { ActionData } from './$types';
 	import { enhance } from '$app/forms';
 

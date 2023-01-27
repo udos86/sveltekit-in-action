@@ -1,8 +1,8 @@
 import { json } from '@sveltejs/kit';
 import { Prisma, PrismaClient } from '@prisma/client';
 import type { RequestHandler } from './$types';
-import { isAuthenticated } from '$lib/auth';
-import { todoSelect } from '$lib/prisma';
+import { isAuthenticated } from '$lib/auth/guards';
+import { todoSelect } from '$lib/db/prisma';
 
 const prisma = new PrismaClient();
 
