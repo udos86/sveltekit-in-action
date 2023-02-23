@@ -3,7 +3,7 @@
 
 	export let todo: Todo | undefined = undefined;
 
-	const formModel = {
+	export let value = {
 		text: todo?.text ?? '',
 		done: todo?.done ?? false
 	};
@@ -14,7 +14,7 @@
 {/if}
 
 <label for="text">Text</label>
-<input type="text" name="text" bind:value={formModel.text} />
+<input type="text" name="text" bind:value={value.text} />
 
 <label for="done">Done:</label>
-<input name="done" type="checkbox" bind:checked={formModel.done} value={formModel.done} />
+<input name="done" type="checkbox" value={value.done} bind:checked={value.done} />

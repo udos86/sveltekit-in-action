@@ -2,7 +2,7 @@
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { signIn, signOut } from '@auth/sveltekit/client';
-	import { appContextKey, type AppContext } from '../stores';
+	import { appContextKey, type AppContext } from '$lib/stores';
 	import type { LayoutData } from './$types';
 	import '../app.css';
 
