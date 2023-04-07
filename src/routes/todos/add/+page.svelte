@@ -15,7 +15,7 @@
 </script>
 
 <h2>Add Todo</h2>
-<form method="POST" use:enhance>
+<form method="POST" action="?/add" use:enhance>
 	<TodoForm bind:value={formValue} />
 	<button class="primary-button">Save</button>
 </form>

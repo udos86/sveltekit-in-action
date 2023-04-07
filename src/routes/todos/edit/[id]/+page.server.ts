@@ -22,7 +22,7 @@ export const load: PageServerLoad = (async ({ fetch, locals, params }) => {
 });
 
 export const actions: Actions = {
-  default: async ({ fetch, locals, request }) => {
+  edit: async ({ fetch, locals, request }) => {
     await isAuthenticated(locals);
 
     const formData = await parseFormData(request, editTodoFormData);

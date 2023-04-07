@@ -2,7 +2,7 @@
 	import { useRegisterSW } from 'virtual:pwa-register/svelte';
 
 	// replaced via Vite define plugin
-	let periodicUpdateSW = __PERIODIC_UPDATE_SW__;
+	const periodicUpdateSW = __PERIODIC_UPDATE_SW__;
 
 	const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 		onRegisteredSW(_swScriptUrl, registration) {

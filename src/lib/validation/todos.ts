@@ -10,3 +10,7 @@ export const editTodoFormData = zfd.formData({
     text: zfd.text(),
     done: zfd.checkbox()
 });
+
+export const deleteTodoFormData = zfd.formData({
+    todoId: zfd.text()
+});

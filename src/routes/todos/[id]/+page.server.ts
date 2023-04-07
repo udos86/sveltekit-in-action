@@ -2,6 +2,8 @@ import { error, redirect } from '@sveltejs/kit';
 import { isAuthenticated } from '$lib/auth';
 import type { Todo } from '@prisma/client';
 import type { Actions, PageServerLoad } from './$types';
+import { parseFormData } from '$lib/validation';
+import { deleteTodoFormData } from '$lib/validation/todos';
 
 const url = '/api/todos';
 
@@ -22,8 +24,7 @@ export const actions: Actions = {
   delete: async ({ fetch, locals, request }) => {
     await isAuthenticated(locals);
 
-    const formData = await request.formData();
-    const todoId = formData.get('todoId');
+    const { todoId } = await parseFormData(request, deleteTodoFormData);
 
     await fetch(`${url}/${todoId}`, { method: 'DELETE' });
 

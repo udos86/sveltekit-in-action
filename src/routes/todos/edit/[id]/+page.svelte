@@ -18,7 +18,7 @@
 	<h2 class="grow">Update Todo</h2>
 </header>
 
-<form method="POST" use:enhance={onSubmit}>
+<form method="POST" action="?/edit" use:enhance={onSubmit}>
 	<TodoForm todo={data.todo} />
 	<button class="primary-button">Save</button>
 </form>

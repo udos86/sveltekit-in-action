@@ -11,7 +11,6 @@ declare const __PERIODIC_UPDATE_SW__: boolean
 declare namespace App {
 	// interface Error {}
 	interface Locals {
-		userId: string | undefined;
 	}
 	// interface PageData {}
 	// interface Platform {}

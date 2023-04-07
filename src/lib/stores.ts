@@ -7,7 +7,6 @@ import type { Writable } from "svelte/store";
 // see https://kit.svelte.dev/docs/state-management
 // export const count = writable(0);
 
-
 // provide store via Context API as described in official docs
 // see https://kit.svelte.dev/docs/state-management#using-stores-with-context
 export interface AppStores {
