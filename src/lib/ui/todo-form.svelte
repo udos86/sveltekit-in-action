@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Todo } from '@prisma/client';
 
+	// explicit set undefined to make prop optional without warnings 
+	// see https://github.com/sveltejs/svelte/issues/4893
 	export let todo: Todo | undefined = undefined;
 
 	export let value = {
@@ -17,4 +19,4 @@
 <input type="text" name="text" bind:value={value.text} />
 
 <label for="done">Done:</label>
-<input name="done" type="checkbox" value={value.done} bind:checked={value.done} />
+<input name="done" type="checkbox" bind:checked={value.done} />

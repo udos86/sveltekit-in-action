@@ -1,8 +1,7 @@
 <script lang="ts">
 	import TodoForm from '$lib/ui/todo-form.svelte';
-	import type { ActionData } from './$types';
 	import { enhance } from '$app/forms';
-	import type { Snapshot } from '@sveltejs/kit';
+	import type { ActionData, Snapshot } from './$types';
 	import type { Todo } from '@prisma/client';
 
 	export let form: ActionData | undefined;

@@ -1,13 +1,14 @@
-import { isAuthenticated } from "$lib/auth/guards";
+import { isAuthenticated } from "$lib/auth";
 import { error } from "@sveltejs/kit";
 import type { Prisma, Todo } from "@prisma/client";
 import type { Actions, PageServerLoad } from './$types';
+import { parseFormData } from "$lib/validation";
+import { editTodoFormData } from "$lib/validation/todos";
 
 const url = '/api/todos';
 
 export const load: PageServerLoad = (async ({ fetch, locals, params }) => {
-  const session = await locals.getSession();
-  isAuthenticated(session);
+  await isAuthenticated(locals);
 
   const response = await fetch(`${url}/${params.id}`);
   const data: Todo | Error = await response.json();
@@ -22,17 +23,15 @@ export const load: PageServerLoad = (async ({ fetch, locals, params }) => {
 
 export const actions: Actions = {
   default: async ({ fetch, locals, request }) => {
-    const session = await locals.getSession();
-    isAuthenticated(session);
+    await isAuthenticated(locals);
 
-    const formData = await request.formData();
-    const todoId = formData.get('todoId');
+    const formData = await parseFormData(request, editTodoFormData);
     const body: Prisma.TodoUpdateWithoutUserInput = {
-      text: formData.get('text') as string,
-      done: Boolean(formData.get('done') as string)
+      text: formData.text,
+      done: formData.done
     };
 
-    await fetch(`${url}/${todoId}`, {
+    await fetch(`${url}/${formData.todoId}`, {
       method: 'PUT',
       body: JSON.stringify(body),
       headers: { 'content-type': 'application/json' }

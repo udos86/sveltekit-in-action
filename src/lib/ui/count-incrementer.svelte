@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { appContextKey, type AppContext } from '../stores';
+	import { appStores, type AppStores } from '../stores';
 	import { getContext } from 'svelte';
 
-	const { count } = getContext<AppContext>(appContextKey);
+	const { count } = getContext<AppStores>(appStores);
 </script>
 
-<button on:click={() => ($count += 1)}>+1</button>
+<button class="bg-blue-500" on:click={() => ($count += 1)}>+1</button>

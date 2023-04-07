@@ -1,20 +1,34 @@
 <script lang="ts">
-	import { setContext } from 'svelte';
+	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { signIn, signOut } from '@auth/sveltekit/client';
-	import { appContextKey, type AppContext } from '$lib/stores';
+	import { pwaInfo } from 'virtual:pwa-info';
+	import { setAppStores } from '$lib/stores';
 	import type { LayoutData } from './$types';
 	import '../app.css';
 
 	export let data: LayoutData;
 
-	const count = writable(0);
+	let PWAPrompt: ConstructorOfATypedSvelteComponent | undefined;
 
-	setContext<AppContext>(appContextKey, { count });
+	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 
-	const onSignInButtonClicked = () => signIn('github');
+	onMount(async () => {
+		if (pwaInfo !== undefined) {
+			// Prompt needs to be importet dynamically on the client-side due to SSR/SSG
+			PWAPrompt = (await import('$lib/pwa/Prompt.svelte')).default;
+		}
+	});
+
+	setAppStores({ count: writable(0) });
+
+	const onSignInButtonClicked = () => signIn('datev');
 	const onSignOutButtonClicked = () => signOut();
 </script>
+
+<svelte:head>
+	{@html webManifest}
+</svelte:head>
 
 <header class="flex flex-col px-3 pt-2 bg-gray-100 border-b border-gray-300">
 	<div class="flex items-center space-x-3">
@@ -48,3 +62,7 @@
 <main class="p-3 space-y-4">
 	<slot />
 </main>
+
+{#if PWAPrompt}
+	<svelte:component this={PWAPrompt} />
+{/if}

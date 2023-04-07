@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+
+	let { error, status } = $page;
 </script>
 
-<h1>Error</h1>
+<h2>Error {status}</h2>
 
-<p>{$page.error?.message}</p>
+<p class="text-center">{error?.message}</p>

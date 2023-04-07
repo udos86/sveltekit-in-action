@@ -1,32 +1,34 @@
 import { error, json } from '@sveltejs/kit';
 import { Prisma, PrismaClient } from '@prisma/client';
+import { isAuthenticated } from '$lib/auth';
+import { todoSelect } from '$lib/prisma';
 import type { RequestHandler } from './$types';
-import { isAuthenticated } from '$lib/auth/guards';
-import { todoSelect } from '$lib/db/prisma';
 
 const prisma = new PrismaClient();
 
-export const GET: RequestHandler = (async ({ locals, params }) => {
-  const session = await locals.getSession();
-  isAuthenticated(session);
+export const GET: RequestHandler = async ({ locals, params }) => {
+  const session = await isAuthenticated(locals);
 
   const todo = await prisma.todo.findFirst({
-    where: { id: params.id, user: { email: session!.user!.email! } },
+    where: { id: params.id, user: { email: session.user.email } },
     select: todoSelect
   });
 
-  return json(todo);
-});
+  if (todo === null) {
+    throw error(404, { message: `Todo with id ${params.id} not found` });
+  }
 
-export const PUT: RequestHandler = (async ({ locals, params, request }) => {
-  const session = await locals.getSession();
-  isAuthenticated(session);
+  return json(todo);
+};
+
+export const PUT: RequestHandler = async ({ locals, params, request }) => {
+  const session = await isAuthenticated(locals);
 
   const data: Prisma.TodoUpdateInput = await request.json();
 
   try {
     await prisma.user.update({
-      where: { email: session!.user!.email! },
+      where: { email: session.user.email },
       data: {
         todos: {
           update: {
@@ -40,15 +42,14 @@ export const PUT: RequestHandler = (async ({ locals, params, request }) => {
   } catch (err) {
     throw error(404, { message: `Todo with id ${params.id} not found` });
   }
-});
+};
 
-export const DELETE: RequestHandler = (async ({ locals, params }) => {
-  const session = await locals.getSession();
-  isAuthenticated(session);
+export const DELETE: RequestHandler = async ({ locals, params }) => {
+  const session = await isAuthenticated(locals);
 
   try {
     await prisma.user.update({
-      where: { email: session!.user!.email! },
+      where: { email: session.user.email },
       data: {
         todos: {
           delete: { id: params.id },
@@ -60,4 +61,4 @@ export const DELETE: RequestHandler = (async ({ locals, params }) => {
   }
 
   return new Response(null, { status: 204 });
-});
+};

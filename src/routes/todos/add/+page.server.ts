@@ -1,24 +1,24 @@
 import type { Prisma } from '@prisma/client';
-import { isAuthenticated } from '$lib/auth/guards';
+import { isAuthenticated } from '$lib/auth';
 import type { PageServerLoad } from '../$types';
 import type { Actions } from './$types';
+import { parseFormData } from '$lib/validation';
+import { addTodoFormData } from '$lib/validation/todos';
 
 const url = '/api/todos';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  const session = await locals.getSession();
-  isAuthenticated(session);
+  await isAuthenticated(locals);
 };
 
 export const actions: Actions = {
   default: async ({ fetch, locals, request }) => {
-    const session = await locals.getSession();
-    isAuthenticated(session);
+    await isAuthenticated(locals);
 
-    const formData = await request.formData();
+    const formData = await parseFormData(request, addTodoFormData);
     const body: Prisma.TodoCreateWithoutUserInput = {
-      text: formData.get('text') as string,
-      done: Boolean(formData.get('done') as string)
+      text: formData.text,
+      done: formData.done
     };
 
     await fetch(url, {
@@ -29,6 +29,6 @@ export const actions: Actions = {
       }
     });
 
-    return {success: true};
+    return { success: true };
   }
 };

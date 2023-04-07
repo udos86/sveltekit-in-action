@@ -1,17 +1,16 @@
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import { Prisma, PrismaClient } from '@prisma/client';
 import type { RequestHandler } from './$types';
-import { isAuthenticated } from '$lib/auth/guards';
-import { todoSelect } from '$lib/db/prisma';
+import { isAuthenticated } from '$lib/auth';
+import { todoSelect } from '$lib/prisma';
 
 const prisma = new PrismaClient();
 
-export const GET: RequestHandler = (async ({ locals }) => {
-  const session = await locals.getSession();
-  isAuthenticated(session);
+export const GET: RequestHandler = async ({ locals }) => {
+  const session = await isAuthenticated(locals);
 
-  const result = await prisma.user.findUnique({
-    where: { email: session!.user!.email! },
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
     include: {
       todos: {
         orderBy: { updatedAt: 'desc' },
@@ -20,12 +19,15 @@ export const GET: RequestHandler = (async ({ locals }) => {
     }
   });
 
-  return json(result?.todos);
-});
+  if (user === null) {
+    throw error(404, { message: `Unknown user` });
+  }
 
-export const POST: RequestHandler = (async ({ locals, request }) => {
-  const session = await locals.getSession();
-  isAuthenticated(session);
+  return json(user.todos);
+};
+
+export const POST: RequestHandler = async ({ locals, request }) => {
+  const session = await isAuthenticated(locals);
 
   const data: Prisma.TodoCreateWithoutUserInput = await request.json();
 
@@ -33,11 +35,11 @@ export const POST: RequestHandler = (async ({ locals, request }) => {
     data: {
       ...data,
       user: {
-        connect: { email: session!.user!.email! }
+        connect: { email: session.user.email }
       }
     },
     select: todoSelect
   });
 
   return json(todo);
-});
+};
