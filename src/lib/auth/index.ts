@@ -1,5 +1,6 @@
 import { error } from "@sveltejs/kit";
 import type { Session } from "@auth/core/types";
+import type { Permission } from "@prisma/client";
 
 export const isAuthenticated = async (locals: App.Locals): Promise<Session & { user: { email: string } }> | never => {
   const session = await locals.getSession();
@@ -9,4 +10,12 @@ export const isAuthenticated = async (locals: App.Locals): Promise<Session & { u
   }
 
   return session as Session & { user: { email: string } };
+};
+
+export const hasPermission = (session: Session, permission: Permission): boolean | never => {
+  if (Array.isArray(session.user?.permissions) && session.user?.permissions.includes(permission)) {
+    return true;
+  }
+
+  throw error(403, { message: 'You do not have the permission.' });
 };

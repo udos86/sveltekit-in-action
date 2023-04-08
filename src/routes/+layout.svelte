@@ -56,6 +56,7 @@
 	<nav class="space-x-1">
 		<a href="/" class="nav-link">Home</a>
 		<a href="/todos" class="nav-link">Todos</a>
+		<a href="/openai" class="nav-link">OpenAI</a>
 	</nav>
 </header>
 

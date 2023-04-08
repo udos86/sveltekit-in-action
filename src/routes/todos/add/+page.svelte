@@ -23,5 +23,3 @@
 {#if form}
 	<p>{JSON.stringify(form)}</p>
 {/if}
-
-<!--CountIncrementer /-->

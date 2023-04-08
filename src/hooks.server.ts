@@ -31,6 +31,12 @@ export const handle = sequence(
           }
         }
       })
-    ]
+    ],
+    callbacks: {
+      session({ session, token, user }) {
+        session.user!.permissions = user.permissions;
+        return session
+      }
+    }
   })
 );
