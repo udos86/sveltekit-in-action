@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Permission" AS ENUM ('TODOS', 'OPENAI');
+
 -- CreateTable
 CREATE TABLE "Account" (
     "id" TEXT NOT NULL,
@@ -33,6 +36,7 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
+    "permissions" "Permission"[] DEFAULT ARRAY['TODOS']::"Permission"[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
