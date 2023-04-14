@@ -1,52 +1,26 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { typewriter } from '$lib/anim';
-	import type { ActionData } from './$types';
+	import type { PageData } from './$types';
 
-	export let form: ActionData;
+	export let data: PageData;
 
-	let showCursor = false;
+	console.log(data.chats);
 </script>
 
 <header class="flex">
 	<h2 class="grow">OpenAI</h2>
+	<form method="POST" action="?/new">
+		<button class="primary-button">New Chat</button>
+	</form>
 </header>
 
-<form method="POST" action="?/ask" use:enhance>
-	<label for="text">Your Question</label>
-	<input type="text" name="prompt" />
-	<button class="primary-button">Send</button>
-</form>
-
-{#if form}
-	<p
-		class={showCursor ? 'cursor-blink' : ''}
-		transition:typewriter={{ delay: 2000 }}
-		on:introstart={() => (showCursor = true)}
-		on:introend={() => (showCursor = false)}
-	>
-		{form.data}
-	</p>
-{/if}
-
-<style>
-	@keyframes cursor-blink {
-		from,
-		to {
-			background-color: transparent;
-		}
-		50% {
-			background-color: black;
-		}
-	}
-
-	.cursor-blink::after {
-		content: '';
-		width: 2px;
-		height: 16px;
-		background: black;
-		margin: 0 0.125rem;
-		display: inline-block;
-		animation: cursor-blink 1s step-end infinite;
-	}
-</style>
+<ul class="bg-white divide-y divide-gray-200 border rounded-t-md">
+	{#each data.chats as chat (chat.id)}
+		<li class="flex hover:bg-gray-200">
+			<a href="/openai/{chat.id}" class="grow p-3">{chat.name}</a>
+			<form method="POST" action="?/delete" class="self-center">
+				<input type="hidden" name="chatId" value={chat.id} />
+				<button class="text-black">❌</button>
+			</form>
+		</li>
+	{/each}
+</ul>

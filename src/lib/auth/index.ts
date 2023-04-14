@@ -12,7 +12,7 @@ export const isAuthenticated = async (locals: App.Locals): Promise<Session & { u
   return session as Session & { user: { email: string } };
 };
 
-export const hasPermission = (session: Session, permission: Permission): boolean | never => {
+export const isAuthorized = (session: Session, permission: Permission): boolean | never => {
   if (Array.isArray(session.user?.permissions) && session.user?.permissions.includes(permission)) {
     return true;
   }
