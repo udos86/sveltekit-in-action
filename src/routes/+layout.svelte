@@ -60,7 +60,7 @@
 	</nav>
 </header>
 
-<main class="p-4 space-y-4 flex-auto overflow-y-auto">
+<main class="flex flex-col flex-auto min-h-0">
 	<slot />
 </main>
 

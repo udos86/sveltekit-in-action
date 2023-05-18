@@ -1,12 +1,13 @@
-import { OpenAI } from "langchain/llms";
+import { ChatOpenAI } from "langchain/chat_models";
+import { HumanChatMessage } from "langchain/schema";
 import { isAuthorized, isAuthenticated } from "$lib/auth";
 import { MessageAuthor, Permission, PrismaClient } from "@prisma/client";
-import { error, redirect, type Actions } from "@sveltejs/kit";
+import { error, type Actions } from "@sveltejs/kit";
 import { parseFormData } from "$lib/validation";
-import { chatDeleteFormData, chatEditNameFormData, chatMessageFormData } from "$lib/validation/chat";
+import { editChatNameFormData, addChatMessageFormData } from "$lib/validation/chat";
 import type { PageServerLoad } from "./$types";
 
-const model = new OpenAI();
+const chat = new ChatOpenAI();
 const prisma = new PrismaClient();
 
 export const load: PageServerLoad = (async ({ locals, params }) => {
@@ -30,7 +31,7 @@ export const actions: Actions = {
 		const session = await isAuthenticated(locals);
 		await isAuthorized(session, Permission.OPENAI);
 
-		const { chatId, name } = await parseFormData(request, chatEditNameFormData);
+		const { chatId, name } = await parseFormData(request, editChatNameFormData);
 		await prisma.user.update({
 			where: { email: session.user.email },
 			data: {
@@ -50,13 +51,15 @@ export const actions: Actions = {
 		const session = await isAuthenticated(locals);
 		await isAuthorized(session, Permission.OPENAI);
 
-		const { chatId, message } = await parseFormData(request, chatMessageFormData);
-		const response = await model.call(message);
+		const { chatId, message } = await parseFormData(request, addChatMessageFormData);
+		const response = await chat.call([
+			new HumanChatMessage(message)
+		]);
 
 		const input = await prisma.message.create({
 			data: {
 				text: message,
-				author: MessageAuthor.USER,
+				author: MessageAuthor.HUMAN,
 				chat: { connect: { id: chatId } },
 				user: { connect: { email: session.user.email } }
 			}
@@ -64,8 +67,8 @@ export const actions: Actions = {
 
 		const output = await prisma.message.create({
 			data: {
-				text: response,
-				author: MessageAuthor.OPENAI,
+				text: response.text,
+				author: MessageAuthor.AI,
 				chat: { connect: { id: chatId } },
 				user: { connect: { email: session.user.email } }
 			}

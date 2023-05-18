@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "MessageAuthor" AS ENUM ('USER', 'OPENAI');
+CREATE TYPE "MessageAuthor" AS ENUM ('HUMAN', 'AI');
 
 -- CreateEnum
 CREATE TYPE "Permission" AS ENUM ('TODOS', 'OPENAI');

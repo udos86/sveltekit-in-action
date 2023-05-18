@@ -92,8 +92,8 @@ model Message {
 }
 
 enum MessageAuthor {
-  USER
-  OPENAI
+  HUMAN
+  AI
 }
 
 enum Permission {

@@ -1,6 +1,6 @@
 import { isAuthenticated, isAuthorized } from "$lib/auth";
 import { parseFormData } from "$lib/validation";
-import { chatDeleteFormData } from "$lib/validation/chat";
+import { deleteChatFormData } from "$lib/validation/chat";
 import { Permission, PrismaClient } from "@prisma/client";
 import { error, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
@@ -42,7 +42,7 @@ export const actions: Actions = {
 		const session = await isAuthenticated(locals);
 		await isAuthorized(session, Permission.OPENAI);
 
-		const { chatId } = await parseFormData(request, chatDeleteFormData);
+		const { chatId } = await parseFormData(request, deleteChatFormData);
 		await prisma.user.update({
 			where: { email: session.user.email },
 			data: {
