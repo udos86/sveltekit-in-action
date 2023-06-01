@@ -17,5 +17,3 @@
 </header>
 
 <p class:done-todo={data.todo.done}>{data.todo.text}</p>
-
-<!--CountIncrementer /-->
