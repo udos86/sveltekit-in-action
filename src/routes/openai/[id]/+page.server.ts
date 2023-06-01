@@ -1,18 +1,18 @@
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { HumanChatMessage } from "langchain/schema";
 import { isAuthorized, isAuthenticated } from "$lib/auth";
-import { MessageAuthor, Permission, PrismaClient } from "@prisma/client";
+import { MessageAuthor, Permission } from "@prisma/client";
+import { prisma } from "$lib/prisma";
 import { error, type Actions } from "@sveltejs/kit";
 import { parseFormData } from "$lib/validation";
 import { editChatNameFormData, addChatMessageFormData } from "$lib/validation/chat";
 import type { PageServerLoad } from "./$types";
 
 const chat = new ChatOpenAI();
-const prisma = new PrismaClient();
 
 export const load: PageServerLoad = (async ({ locals, params }) => {
 	const session = await isAuthenticated(locals);
-	await isAuthorized(session, Permission.OPENAI)
+	isAuthorized(session, Permission.OPENAI)
 
 	const chat = await prisma.chat.findFirst({
 		where: { id: params.id, user: { email: session.user.email } },
@@ -29,7 +29,7 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
 export const actions: Actions = {
 	title: async ({ locals, request }) => {
 		const session = await isAuthenticated(locals);
-		await isAuthorized(session, Permission.OPENAI);
+		isAuthorized(session, Permission.OPENAI);
 
 		const { chatId, name } = await parseFormData(request, editChatNameFormData);
 		await prisma.user.update({

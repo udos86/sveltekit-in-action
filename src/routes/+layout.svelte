@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { pwaInfo } from 'virtual:pwa-info';
-	import { setAppStores } from '$lib/stores';
 	import type { LayoutData } from './$types';
 	import '../app.css';
 
@@ -20,9 +18,7 @@
 		}
 	});
 
-	setAppStores({ count: writable(0) });
-
-	const onSignInButtonClicked = () => signIn('datev');
+	const onSignInButtonClicked = () => signIn();
 	const onSignOutButtonClicked = () => signOut();
 </script>
 

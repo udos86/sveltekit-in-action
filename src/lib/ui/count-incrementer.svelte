@@ -5,4 +5,5 @@
 	const { count } = getContext<AppStores>(appStores);
 </script>
 
-<button class="bg-blue-500" on:click={() => ($count += 1)}>+1</button>
+<button class="bg-blue-500" on:click={() => count.update(value => value + 1)}>+1</button>
+<p>{$count}</p>

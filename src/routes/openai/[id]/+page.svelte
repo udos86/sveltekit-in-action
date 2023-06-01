@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { enhance, type SubmitFunction } from '$app/forms';
+	import { enhance } from '$app/forms';
 	import { typewriter } from '$lib/anim';
 	import { MessageAuthor } from '@prisma/client';
 	import type { Message } from '@prisma/client';
+	import type { SubmitFunction } from '@sveltejs/kit';
 
 	import type { ActionData, PageData } from './$types';
 	import { onMount, tick } from 'svelte';

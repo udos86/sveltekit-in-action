@@ -2,10 +2,8 @@ import { sequence } from "@sveltejs/kit/hooks";
 import GitHub from "@auth/core/providers/github";
 import { SvelteKitAuth } from "@auth/sveltekit";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from '$lib/prisma';
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "$env/static/private";
-
-const prisma = new PrismaClient();
 
 export const handle = sequence(
   SvelteKitAuth({

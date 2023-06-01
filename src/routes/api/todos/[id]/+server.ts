@@ -1,10 +1,8 @@
 import { error, json } from '@sveltejs/kit';
-import { Prisma, PrismaClient } from '@prisma/client';
 import { isAuthenticated } from '$lib/auth';
-import { todoSelect } from '$lib/prisma';
+import { prisma, todoSelect } from '$lib/prisma';
+import type { Prisma } from '@prisma/client';
 import type { RequestHandler } from './$types';
-
-const prisma = new PrismaClient();
 
 export const GET: RequestHandler = async ({ locals, params }) => {
   const session = await isAuthenticated(locals);

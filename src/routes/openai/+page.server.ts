@@ -1,11 +1,10 @@
 import { isAuthenticated, isAuthorized } from "$lib/auth";
+import { prisma } from "$lib/prisma";
 import { parseFormData } from "$lib/validation";
 import { deleteChatFormData } from "$lib/validation/chat";
-import { Permission, PrismaClient } from "@prisma/client";
+import { Permission } from "@prisma/client";
 import { error, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-
-const prisma = new PrismaClient();
 
 export const load: PageServerLoad = (async ({ locals }) => {
 	const session = await isAuthenticated(locals);

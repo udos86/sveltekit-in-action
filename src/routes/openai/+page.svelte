@@ -4,7 +4,7 @@
 	export let data: PageData;
 </script>
 
-<header class="flex p-4 pb-3 border-b border-gray-300">
+<header class="flex p-3 border-b border-gray-300">
 	<h2 class="grow">OpenAI</h2>
 	<form method="POST" action="?/new">
 		<button class="primary-button">New Chat</button>
