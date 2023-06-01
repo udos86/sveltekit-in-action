@@ -34,6 +34,8 @@ export const handle = sequence(
     ],
     callbacks: {
       session({ session, token, user }) {
+        // see https://github.com/nextauthjs/next-auth/issues/7132
+        // @ts-ignore
         session.user!.permissions = user.permissions;
         return session
       }

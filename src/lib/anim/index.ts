@@ -1,4 +1,3 @@
-import { Container } from 'postcss';
 import type { TransitionConfig } from 'svelte/transition';
 
 export interface TypewriterParams {

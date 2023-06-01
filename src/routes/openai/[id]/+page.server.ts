@@ -1,4 +1,4 @@
-import { ChatOpenAI } from "langchain/chat_models";
+import { ChatOpenAI } from "langchain/chat_models/openai";
 import { HumanChatMessage } from "langchain/schema";
 import { isAuthorized, isAuthenticated } from "$lib/auth";
 import { MessageAuthor, Permission, PrismaClient } from "@prisma/client";

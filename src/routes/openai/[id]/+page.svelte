@@ -32,9 +32,9 @@
 
 	onMount(() => scrollToEnd());
 
-	const onMessageSend: SubmitFunction = async ({ controller, form, data }) => {
-		const message = data.get('message');
-		form.reset();
+	const onMessageSend: SubmitFunction = async ({ controller, formData, formElement }) => {
+		const message = formData.get('message');
+		formElement.reset();
 		if (typeof message === 'string') {
 			// when JS is available immediately display input message without waiting for form action
 			addMessage({ text: message, author: MessageAuthor.HUMAN, id: crypto.randomUUID() });
@@ -88,7 +88,7 @@
 	</form>
 </header>
 
-<ul class="divide-y divide-gray-300 overflow-y-auto shadow-inner" bind:this={chatElement}>
+<ul class="grow divide-y divide-gray-300 overflow-y-auto shadow-inner" bind:this={chatElement}>
 	{#each chat as message (message.id)}
 		<li class="flex items-start even:bg-gray-100 p-4">
 			{#if message.author === MessageAuthor.HUMAN && data?.session?.user?.image}
