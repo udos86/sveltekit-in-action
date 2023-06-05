@@ -52,6 +52,7 @@ export const actions: Actions = {
 		await isAuthorized(session, Permission.OPENAI);
 
 		const { chatId, message } = await parseFormData(request, addChatMessageFormData);
+		
 		const response = await chat.call([
 			new HumanChatMessage(message)
 		]);

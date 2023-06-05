@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { pwaInfo } from 'virtual:pwa-info';
+	import NavLink from '$lib/ui/nav-link.svelte';
 	import type { LayoutData } from './$types';
 	import '../app.css';
 
@@ -26,7 +27,7 @@
 	{@html webManifest}
 </svelte:head>
 
-<header class="flex flex-col px-3 pt-2 bg-gray-100 border-b border-gray-300">
+<header class="flex flex-col px-3 pt-2 border-b border-gray-300">
 	<div class="flex items-center space-x-3">
 		<h1 class="grow">SvelteKit Demo</h1>
 
@@ -50,9 +51,9 @@
 	</div>
 
 	<nav class="space-x-1">
-		<a href="/" class="nav-link">Home</a>
-		<a href="/todos" class="nav-link">Todos</a>
-		<a href="/openai" class="nav-link">OpenAI</a>
+		<NavLink href="/" title="Home" />
+		<NavLink href="/todos" title="Todos" />
+		<NavLink href="/openai" title="OpenAI" />
 	</nav>
 </header>
 

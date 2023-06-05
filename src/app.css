@@ -25,9 +25,11 @@
   }
 
   .nav-link {
-    @apply inline-block bg-white font-bold p-2 rounded-t-md border-x border-t border-gray-300;
-    position: relative;
-    bottom: -1px;
+    @apply inline-block font-bold p-2;
+  }
+
+  .nav-link.active {
+    @apply border-b-4 border-sky-600;
   }
 }
 

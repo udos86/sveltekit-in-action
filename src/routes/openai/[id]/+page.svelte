@@ -1,35 +1,19 @@
 <script lang="ts">
+	import { onMount, tick } from 'svelte';
 	import { enhance } from '$app/forms';
 	import { typewriter } from '$lib/anim';
 	import { MessageAuthor } from '@prisma/client';
 	import type { Message } from '@prisma/client';
 	import type { SubmitFunction } from '@sveltejs/kit';
-
-	import type { ActionData, PageData } from './$types';
-	import { onMount, tick } from 'svelte';
+	import type { PageData } from './$types';
 
 	type PartialMessage = Pick<Message, 'author' | 'id' | 'text'>;
 
 	export let data: PageData;
-	export let form: ActionData;
 
 	let latestAiMessageId: string | null = null;
 	let chat: PartialMessage[] = [...data.chat.messages];
 	let chatElement: HTMLUListElement;
-
-	if (form !== null && form.action === 'ask') {
-		const [input, output] = form.messages!;
-		addMessage({
-			text: input.text,
-			author: MessageAuthor.HUMAN,
-			id: crypto.randomUUID()
-		});
-		addMessage({
-			text: output.text,
-			author: MessageAuthor.AI,
-			id: crypto.randomUUID()
-		});
-	}
 
 	onMount(() => scrollToEnd());
 
