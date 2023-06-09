@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
+	import { MessageAuthor } from '@prisma/client';
 	import { enhance } from '$app/forms';
 	import { typewriter } from '$lib/anim';
-	import { MessageAuthor } from '@prisma/client';
+	import Dialog from '$lib/ui/dialog.svelte';
 	import type { Message } from '@prisma/client';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { PageData } from './$types';
@@ -11,55 +12,83 @@
 
 	export let data: PageData;
 
-	let latestAiMessageId: string | null = null;
 	let chat: PartialMessage[] = [...data.chat.messages];
 	let chatElement: HTMLUListElement;
+	let formPending = false;
+	let pendingAiMessageId: string | null = null;
 
 	onMount(() => scrollToEnd());
 
 	const onMessageSend: SubmitFunction = async ({ controller, formData, formElement }) => {
 		const message = formData.get('message');
-		formElement.reset();
-		if (typeof message === 'string') {
-			// when JS is available immediately display input message without waiting for form action
-			addMessage({ text: message, author: MessageAuthor.HUMAN, id: crypto.randomUUID() });
-			// wait until message has entered the DOM then scroll
-			await tick();
-			scrollToEnd();
-		} else {
+
+		if (typeof message !== 'string') {
 			controller.abort();
+			return;
 		}
 
+		formPending = true;
+		formElement.reset();
+
+		pendingAiMessageId = crypto.randomUUID();
+
+		// when JS is available add input and pending output message with random ids
+		// to immediately display content without waiting for form action result
+		const humanMessage = { text: message, author: MessageAuthor.HUMAN, id: crypto.randomUUID() };
+		const pendingAiMessage = { text: '', author: MessageAuthor.AI, id: pendingAiMessageId };
+
+		addMessage(humanMessage, pendingAiMessage);
+
+		// wait until message has entered the DOM then scroll
+		await tick();
+		scrollToEnd();
+
 		return async ({ result }) => {
+			formPending = false;
+
 			if (result.type === 'success' && result.data !== undefined) {
 				const [, output] = result.data.messages;
-				latestAiMessageId = output.id;
-				addMessage(output);
+				pendingAiMessage.text = output.text;
+				updateChat();
 			}
 		};
 	};
 
-	function addMessage(message: PartialMessage) {
-		chat = [...chat, message];
+	function addMessage(...messages: PartialMessage[]) {
+		chat = [...chat, ...messages];
+	}
+
+	function updateChat() {
+		chat = [...chat];
 	}
 
 	function scrollToEnd() {
 		chatElement.scroll({ behavior: 'auto', top: chatElement.scrollHeight });
 	}
 
-	function onIntro(event: CustomEvent) {
-		const { target, type } = event;
+	function onIntroEnd(event: CustomEvent) {
+		const { target } = event;
 		if (target === null) throw new Error(`No animation target`);
 
-		if (type === 'introstart') {
-			(target as HTMLElement).classList.add('cursor-blink');
-		} else if (type === 'introend') {
+		if (!formPending) {
 			(target as HTMLElement).classList.remove('cursor-blink');
+			pendingAiMessageId = null;
 		}
 	}
 </script>
 
-<header class="flex p-4 pb-3 border-b border-gray-300">
+<Dialog
+	id="deleteChatDialog"
+	state="manual"
+	formAction="?/delete"
+	hiddenFieldName="chatId"
+	hiddenFieldValue={data.chat.id}
+>
+	<h2 slot="header">Delete Chat</h2>
+	<p>Would you really like to delete this chat?</p>
+</Dialog>
+
+<header class="flex p-3 pb-3 border-b border-gray-300">
 	<form method="POST" action="?/title" class="self-center text-center grow">
 		<input type="hidden" name="chatId" value={data.chat.id} />
 		<label for="text" class="hidden">Chat Title</label>
@@ -71,6 +100,13 @@
 		/>
 		<input type="submit" hidden />
 	</form>
+
+	<button
+		type="button"
+		class="danger-button"
+		popovertarget="deleteChatDialog"
+		popovertargetaction="show">Delete Chat</button
+	>
 </header>
 
 <ul class="grow divide-y divide-gray-300 overflow-y-auto shadow-inner" bind:this={chatElement}>
@@ -94,15 +130,14 @@
 					class="rounded-full border border-slate-500"
 				/>
 			{/if}
-			{#if message.id === latestAiMessageId}
-				<span
-					class="grow max-w-lg ml-2"
-					in:typewriter={{ scrollContainer: chatElement }}
-					on:introstart={onIntro}
-					on:introend={onIntro}
-				>
-					{message.text}
-				</span>
+			{#if message.id === pendingAiMessageId}
+				{#key message.text}
+					<span
+						class="grow max-w-lg ml-2 cursor-blink"
+						in:typewriter={{ scrollContainer: chatElement, text: message.text }}
+						on:introend={onIntroEnd}
+					/>
+				{/key}
 			{:else}
 				<span class="grow max-w-lg ml-2">{message.text}</span>
 			{/if}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import NavLink from '$lib/ui/nav-link.svelte';
@@ -57,8 +58,12 @@
 	</nav>
 </header>
 
-<main class="flex flex-col flex-auto min-h-0">
-	<slot />
+<main class="flex-auto min-h-0">
+	{#key data.pathname}
+		<div class="flex flex-col min-h-0 h-full" in:fade={{ duration: 300, delay: 300 }} out:fade={{ duration: 300 }}>
+			<slot />
+		</div>
+	{/key}
 </main>
 
 {#if PWAPrompt}

@@ -4,13 +4,14 @@ export interface TypewriterParams {
     delay?: number;
     speed?: number;
     scrollContainer?: HTMLElement;
+    text?: string;
 }
 
 export function typewriter(node: Element, params?: TypewriterParams): TransitionConfig {
     const { childNodes } = node;
-    const isAnimatable = childNodes.length === 1 && childNodes[0].nodeType === Node.TEXT_NODE;
+    const hasTextNode = childNodes.length === 1 && childNodes[0].nodeType === Node.TEXT_NODE;
 
-    if (!isAnimatable) {
+    if (!params?.text === undefined && !hasTextNode) {
         throw new Error(`Typewriter transition only works on elements with a single text node child`);
     }
 
@@ -19,7 +20,7 @@ export function typewriter(node: Element, params?: TypewriterParams): Transition
     const speed = params?.speed ?? 1;
     const scrollContainer = params?.scrollContainer;
 
-    const text = node.textContent!;
+    const text = params?.text ?? node.textContent!;
     const duration = text.length / (speed * 0.01);
 
     return {

@@ -3,9 +3,9 @@ import { HumanChatMessage } from "langchain/schema";
 import { isAuthorized, isAuthenticated } from "$lib/auth";
 import { MessageAuthor, Permission } from "@prisma/client";
 import { prisma } from "$lib/prisma";
-import { error, type Actions } from "@sveltejs/kit";
+import { error, redirect, type Actions } from "@sveltejs/kit";
 import { parseFormData } from "$lib/validation";
-import { editChatNameFormData, addChatMessageFormData } from "$lib/validation/chat";
+import { editChatNameFormData, addChatMessageFormData, deleteChatFormData } from "$lib/validation/chat";
 import type { PageServerLoad } from "./$types";
 
 const chat = new ChatOpenAI();
@@ -74,7 +74,31 @@ export const actions: Actions = {
 				user: { connect: { email: session.user.email } }
 			}
 		});
+		
+		await new Promise((resolve) => {
+			setTimeout(resolve, 3000);
+		});
 
 		return { action: 'ask', messages: [input, output] };
-	}
+	},
+
+	delete: async ({ locals, request }) => {
+		const session = await isAuthenticated(locals);
+		await isAuthorized(session, Permission.OPENAI);
+
+		const { chatId } = await parseFormData(request, deleteChatFormData);
+		await prisma.user.update({
+			where: { email: session.user.email },
+			data: {
+				chats: {
+					delete: { id: chatId },
+				},
+			},
+			include: {
+				chats: {}
+			}
+		});
+
+		throw redirect(302, `/openai`);
+	},
 };

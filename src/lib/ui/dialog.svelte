@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { createEventDispatcher } from 'svelte';
 
 	export let id: string;
+	export let formAction: string;
+	export let hiddenFieldValue: string;
+	export let hiddenFieldName = 'id';
 	export let state: 'auto' | 'manual' = 'auto';
-	export let cancelable = true;
 
 	const dispatch = createEventDispatcher();
 </script>
@@ -17,26 +20,22 @@
 		<slot />
 	</div>
 	<footer class="flex justify-end py-2 space-x-2">
-		<slot name="confirmButton">
+		<form method="POST" action={formAction} use:enhance>
+			<input type="hidden" name={hiddenFieldName} value={hiddenFieldValue} />
 			<button
-				type="button"
-				class={cancelable ? 'danger-button' : 'primary-button'}
+				class="danger-button"
 				popovertarget={id}
 				popovertargetaction="hide"
-				on:click={() => dispatch('confirm')}>Ok</button
+				on:click={() => dispatch('confirm')}><slot name="confirmButtonLabel">Confirm</slot></button
 			>
-		</slot>
-		<slot name="cancelButton">
-			{#if cancelable}
-				<button
-					type="button"
-					class="primary-button"
-					popovertarget={id}
-					popovertargetaction="hide"
-					on:click={() => dispatch('cancel')}>Cancel</button
-				>
-			{/if}
-		</slot>
+		</form>
+		<button
+			type="button"
+			class="primary-button"
+			popovertarget={id}
+			popovertargetaction="hide"
+			on:click={() => dispatch('cancel')}><slot name="cancelButtonLabel">Cancel</slot></button
+		>
 	</footer>
 </dialog>
 
