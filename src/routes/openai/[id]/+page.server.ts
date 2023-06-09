@@ -75,10 +75,6 @@ export const actions: Actions = {
 			}
 		});
 		
-		await new Promise((resolve) => {
-			setTimeout(resolve, 3000);
-		});
-
 		return { action: 'ask', messages: [input, output] };
 	},
 
