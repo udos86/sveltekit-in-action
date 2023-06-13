@@ -3,6 +3,13 @@ import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 
 /** @type {import('vite').UserConfig} */
 const config = {
+	resolve: {
+		alias: {
+			// fixed Prisma bundling bug when importing enums
+			// see https://github.com/prisma/prisma/issues/12504
+			'.prisma/client/index-browser': './node_modules/.prisma/client/index-browser.js'
+		}
+	},
 	define: {
 		__BUILD_DATE__: `'${new Date().toISOString()}'`,
 		__PERIODIC_UPDATE_SW__: false,

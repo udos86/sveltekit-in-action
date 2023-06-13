@@ -20,10 +20,10 @@
 
 	onMount(() => {
 		scrollToEnd();
-		// chatScrollObserver = new IntersectionObserver(onIntersectionEvent, { root: chatElement });
+		chatScrollObserver = new IntersectionObserver(onIntersectionEvent, { root: chatElement });
 	});
 
-	// afterUpdate(() => updateObserver());
+	afterUpdate(() => updateObserver());
 
 	const onMessageSend: SubmitFunction = async ({ controller, formData, formElement }) => {
 		const message = formData.get('message');
@@ -62,7 +62,7 @@
 
 	const onIntersectionEvent: IntersectionObserverCallback = async ([entry]) => {
 		if (entry.isIntersecting) {
-			console.log('LI element is visible');
+			// console.log('target is intersecting');
 		}
 	};
 
