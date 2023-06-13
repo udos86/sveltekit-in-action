@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { afterUpdate, onMount, tick } from 'svelte';
 	import { MessageAuthor } from '@prisma/client';
 	import { enhance } from '$app/forms';
 	import { typewriter } from '$lib/anim';
@@ -16,8 +16,14 @@
 	let chatElement: HTMLUListElement;
 	let formPending = false;
 	let pendingAiMessageId: string | null = null;
+	let chatScrollObserver: IntersectionObserver;
 
-	onMount(() => scrollToEnd());
+	onMount(() => {
+		scrollToEnd();
+		// chatScrollObserver = new IntersectionObserver(onIntersectionEvent, { root: chatElement });
+	});
+
+	// afterUpdate(() => updateObserver());
 
 	const onMessageSend: SubmitFunction = async ({ controller, formData, formElement }) => {
 		const message = formData.get('message');
@@ -37,7 +43,7 @@
 		const humanMessage = { text: message, author: MessageAuthor.HUMAN, id: crypto.randomUUID() };
 		const pendingAiMessage = { text: '', author: MessageAuthor.AI, id: pendingAiMessageId };
 
-		addMessage(humanMessage, pendingAiMessage);
+		updateChat(humanMessage, pendingAiMessage);
 
 		// wait until message has entered the DOM then scroll
 		await tick();
@@ -54,16 +60,24 @@
 		};
 	};
 
-	function addMessage(...messages: PartialMessage[]) {
+	const onIntersectionEvent: IntersectionObserverCallback = async ([entry]) => {
+		if (entry.isIntersecting) {
+			console.log('LI element is visible');
+		}
+	};
+
+	function updateChat(...messages: PartialMessage[]) {
 		chat = [...chat, ...messages];
 	}
 
-	function updateChat() {
-		chat = [...chat];
+	function updateObserver() {
+		chatScrollObserver.disconnect();
+		const target = chatElement.querySelector('li:nth-of-type(5)');
+		if (target instanceof HTMLLIElement) chatScrollObserver.observe(target!);
 	}
 
 	function scrollToEnd() {
-		chatElement.scroll({ behavior: 'auto', top: chatElement.scrollHeight });
+		if (chatElement) chatElement.scroll({ behavior: 'auto', top: chatElement.scrollHeight });
 	}
 
 	function onIntroEnd(event: CustomEvent) {
@@ -89,12 +103,13 @@
 </Dialog>
 
 <header class="flex p-3 pb-3 border-b border-gray-300">
-	<form method="POST" action="?/title" class="self-center text-center grow">
+	<form method="POST" action="?/title" class="self-center text-center grow" use:enhance>
 		<input type="hidden" name="chatId" value={data.chat.id} />
-		<label for="text" class="hidden">Chat Title</label>
+		<label for="chatName" class="hidden">Chat Title</label>
 		<input
 			type="text"
 			name="name"
+			id="chatName"
 			class="text-xl text-center p-0 font-bold w-full border-0 focus:ring-0 focus:ring-offset-0"
 			value={data.chat.name}
 		/>
@@ -158,10 +173,11 @@
 			name="lastAiMessage"
 			value={data.chat.messages.findLast((message) => message.author === MessageAuthor.AI)}
 		/-->
-		<label for="text" class="hidden">Message</label>
+		<label for="chatMessage" class="hidden">Message</label>
 		<input
 			type="text"
 			name="message"
+			id="chatMessage"
 			placeholder="Send a message"
 			class="h-12 grow max-w-lg border-2 focus:border-sky-600 rounded"
 			required

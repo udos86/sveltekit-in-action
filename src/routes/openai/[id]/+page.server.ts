@@ -49,8 +49,8 @@ export const actions: Actions = {
 
 	ask: async ({ locals, request }) => {
 		const session = await isAuthenticated(locals);
-		await isAuthorized(session, Permission.OPENAI);
-
+		isAuthorized(session, Permission.OPENAI);
+		
 		const { chatId, message } = await parseFormData(request, addChatMessageFormData);
 		
 		const response = await chat.call([
@@ -75,12 +75,16 @@ export const actions: Actions = {
 			}
 		});
 		
+
+		// const input = {author: MessageAuthor.HUMAN, text: message}
+		// const output = {author: MessageAuthor.AI, text: 'Dies ist ein Beispieltext'}
+
 		return { action: 'ask', messages: [input, output] };
 	},
 
 	delete: async ({ locals, request }) => {
 		const session = await isAuthenticated(locals);
-		await isAuthorized(session, Permission.OPENAI);
+		isAuthorized(session, Permission.OPENAI);
 
 		const { chatId } = await parseFormData(request, deleteChatFormData);
 		await prisma.user.update({
