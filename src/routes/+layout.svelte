@@ -29,7 +29,7 @@
 </svelte:head>
 
 <header class="flex flex-col px-3 pt-2 border-b border-gray-300">
-	<div class="flex items-center space-x-3">
+	<div class="flex items-center space-x-3 overflow-hidden">
 		<h1 class="grow">SvelteKit Demo</h1>
 
 		{#if data.session}
