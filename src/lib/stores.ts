@@ -1,5 +1,5 @@
 import { getContext, setContext } from "svelte";
-import { writable, type Writable } from "svelte/store";
+import { writable, type Updater, type Writable } from "svelte/store";
 
 // stores always become global in server environment
 // therefore are never suitable for storing client-side state
@@ -30,5 +30,13 @@ export const count = {
     const { count } = getContext<AppStores>(appStores);
     if (count === undefined) throw new Error('Store could not be retrieved');
     return count.subscribe(fn);
+  },
+  set(value: number) {
+    const { count } = getContext<AppStores>(appStores);
+    return count.set(value);
+  },
+  update(fn: Updater<number>) {
+    const { count } = getContext<AppStores>(appStores);
+    return count.update(fn);
   }
 };

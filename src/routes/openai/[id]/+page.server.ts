@@ -75,7 +75,6 @@ export const actions: Actions = {
 			}
 		});
 		
-
 		// const input = {author: MessageAuthor.HUMAN, text: message}
 		// const output = {author: MessageAuthor.AI, text: 'Dies ist ein Beispieltext'}
 

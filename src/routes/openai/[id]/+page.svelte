@@ -4,6 +4,7 @@
 	import { enhance } from '$app/forms';
 	import { typewriter } from '$lib/anim';
 	import Dialog from '$lib/ui/dialog.svelte';
+	import Icon from '$lib/ui/icon.svelte';
 	import type { Message } from '@prisma/client';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { PageData } from './$types';
@@ -116,12 +117,9 @@
 		<input type="submit" hidden />
 	</form>
 
-	<button
-		type="button"
-		class="danger-button"
-		popovertarget="deleteChatDialog"
-		popovertargetaction="show">Delete Chat</button
-	>
+	<button type="button" class="icon-button" popovertarget="deleteChatDialog" popovertargetaction="show">
+		<Icon name="trash" />
+	</button>
 </header>
 
 <ul class="grow divide-y divide-gray-300 overflow-y-auto shadow-inner" bind:this={chatElement}>

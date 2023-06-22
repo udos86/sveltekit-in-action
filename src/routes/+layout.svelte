@@ -29,8 +29,8 @@
 </svelte:head>
 
 <header class="flex flex-col px-3 pt-2 border-b border-gray-300">
-	<div class="flex items-center space-x-3 overflow-hidden">
-		<h1 class="grow">SvelteKit Demo</h1>
+	<div class="flex justify-end items-center space-x-3 overflow-hidden">
+		<h1 class="absolute w-full">SvelteKit Demo</h1>
 
 		{#if data.session}
 			{#if data.session.user?.image}
@@ -41,8 +41,9 @@
 					alt="avatar"
 					class="rounded-full border border-slate-500"
 				/>
+			{:else}
+				<strong>{data.session.user?.name}</strong>
 			{/if}
-			<strong>{data.session.user?.name}</strong>
 			<!--a href="/auth/signout">Sign out</a-->
 			<button type="button" class="primary-button" on:click={onSignOutButtonClicked}>Sign out</button>
 		{:else}
@@ -55,12 +56,17 @@
 		<NavLink href="/" title="Home" />
 		<NavLink href="/todos" title="Todos" />
 		<NavLink href="/openai" title="OpenAI" />
+		<NavLink href="/upload" title="File Upload" />
 	</nav>
 </header>
 
 <main class="flex-auto min-h-0">
 	{#key data.pathname}
-		<div class="flex flex-col min-h-0 h-full" in:fade={{ duration: 300, delay: 300 }} out:fade={{ duration: 300 }}>
+		<div
+			class="flex flex-col min-h-0 h-full"
+			in:fade={{ duration: 300, delay: 300 }}
+			out:fade={{ duration: 300 }}
+		>
 			<slot />
 		</div>
 	{/key}
