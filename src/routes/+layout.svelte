@@ -45,9 +45,9 @@
 				<strong>{data.session.user?.name}</strong>
 			{/if}
 			<!--a href="/auth/signout">Sign out</a-->
-			<button type="button" class="primary-button" on:click={onSignOutButtonClicked}>Sign out</button>
+			<button type="button" class="primary-button z-10" on:click={onSignOutButtonClicked}>Sign out</button>
 		{:else}
-			<button type="button" class="primary-button" on:click={onSignInButtonClicked}>Sign In</button>
+			<button type="button" class="primary-button z-10" on:click={onSignInButtonClicked}>Sign In</button>
 			<!--a href="/auth/signin">Sign in</a-->
 		{/if}
 	</div>
