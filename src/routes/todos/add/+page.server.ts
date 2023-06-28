@@ -1,9 +1,11 @@
 import type { Prisma } from '@prisma/client';
+import { fail } from '@sveltejs/kit';
+import { ZodError } from 'zod';
 import { isAuthenticated } from '$lib/auth';
-import type { PageServerLoad } from '../$types';
-import type { Actions } from './$types';
 import { parseFormData } from '$lib/validation';
 import { addTodoFormData } from '$lib/validation/todos';
+import type { PageServerLoad } from '../$types';
+import type { Actions } from './$types';
 
 const url = '/api/todos';
 
@@ -16,6 +18,8 @@ export const actions: Actions = {
     await isAuthenticated(locals);
 
     const formData = await parseFormData(request, addTodoFormData);
+    if (formData instanceof ZodError) return fail(422, formData.formErrors);
+
     const body: Prisma.TodoCreateWithoutUserInput = {
       text: formData.text,
       done: formData.done

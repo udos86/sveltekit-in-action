@@ -1,9 +1,10 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { isAuthenticated } from '$lib/auth';
-import type { Todo } from '@prisma/client';
-import type { Actions, PageServerLoad } from './$types';
+import { ZodError } from 'zod';
 import { parseFormData } from '$lib/validation';
 import { deleteTodoFormData } from '$lib/validation/todos';
+import type { Todo } from '@prisma/client';
+import type { Actions, PageServerLoad } from './$types';
 
 const url = '/api/todos';
 
@@ -24,7 +25,10 @@ export const actions: Actions = {
   delete: async ({ fetch, locals, request }) => {
     await isAuthenticated(locals);
 
-    const { todoId } = await parseFormData(request, deleteTodoFormData);
+    const formData = await parseFormData(request, deleteTodoFormData);
+    if (formData instanceof ZodError) return fail(422, formData.formErrors);
+
+    const { todoId } = formData;
 
     await fetch(`${url}/${todoId}`, { method: 'DELETE' });
 

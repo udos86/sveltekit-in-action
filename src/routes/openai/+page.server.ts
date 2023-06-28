@@ -23,8 +23,8 @@ export const load: PageServerLoad = (async ({ locals }) => {
 export const actions: Actions = {
 	new: async ({ locals }) => {
 		const session = await isAuthenticated(locals);
-    await isAuthorized(session, Permission.OPENAI);
-    
+		await isAuthorized(session, Permission.OPENAI);
+
 		const chat = await prisma.chat.create({
 			data: {
 				name: 'New Chat',

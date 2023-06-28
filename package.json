@@ -17,7 +17,7 @@
 	"devDependencies": {
 		"@playwright/test": "^1.35.1",
 		"@sveltejs/adapter-auto": "^2.1.0",
-		"@sveltejs/kit": "^1.20.4",
+		"@sveltejs/kit": "^1.20.5",
 		"@tailwindcss/forms": "^0.5.3",
 		"@typescript-eslint/eslint-plugin": "^5.60.0",
 		"@typescript-eslint/parser": "^5.60.0",
@@ -45,7 +45,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@auth/core": "^0.8.4",
+		"@auth/core": "^0.9.0",
 		"@auth/sveltekit": "^0.3.3",
 		"@next-auth/prisma-adapter": "^1.0.7",
 		"@prisma/client": "^4.16.1",

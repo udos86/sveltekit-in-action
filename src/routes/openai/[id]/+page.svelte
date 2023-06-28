@@ -103,7 +103,7 @@
 	<p>Would you really like to delete this chat?</p>
 </Dialog>
 
-<header class="flex p-3 pb-3 border-b border-gray-300">
+<header class="flex p-3 border-b border-gray-300">
 	<form method="POST" action="?/title" class="self-center text-center grow" use:enhance>
 		<input type="hidden" name="chatId" value={data.chat.id} />
 		<label for="chatName" class="hidden">Chat Title</label>

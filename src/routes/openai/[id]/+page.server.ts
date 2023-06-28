@@ -3,8 +3,9 @@ import { HumanChatMessage } from "langchain/schema";
 import { isAuthorized, isAuthenticated } from "$lib/auth";
 import { MessageAuthor, Permission } from "@prisma/client";
 import { prisma } from "$lib/prisma";
-import { error, redirect, type Actions } from "@sveltejs/kit";
+import { error, fail, redirect, type Actions } from "@sveltejs/kit";
 import { parseFormData } from "$lib/validation";
+import { ZodError } from "zod";
 import { editChatNameFormData, addChatMessageFormData, deleteChatFormData } from "$lib/validation/chat";
 import type { PageServerLoad } from "./$types";
 
@@ -31,9 +32,14 @@ export const actions: Actions = {
 		const session = await isAuthenticated(locals);
 		isAuthorized(session, Permission.OPENAI);
 
-		const { chatId, name } = await parseFormData(request, editChatNameFormData);
+		const formData = await parseFormData(request, editChatNameFormData);
+		if (formData instanceof ZodError) return fail(422, formData.formErrors);
+
+		const { email } = session.user;
+		const { chatId, name } = formData;
+
 		await prisma.user.update({
-			where: { email: session.user.email },
+			where: { email },
 			data: {
 				chats: {
 					update: {
@@ -50,9 +56,12 @@ export const actions: Actions = {
 	ask: async ({ locals, request }) => {
 		const session = await isAuthenticated(locals);
 		isAuthorized(session, Permission.OPENAI);
-		
-		const { chatId, message } = await parseFormData(request, addChatMessageFormData);
-		
+
+		const formData = await parseFormData(request, addChatMessageFormData);
+		if (formData instanceof ZodError) return fail(422, formData.formErrors);
+
+		const { chatId, message } = formData;
+
 		const response = await chat.call([
 			new HumanChatMessage(message)
 		]);
@@ -74,7 +83,7 @@ export const actions: Actions = {
 				user: { connect: { email: session.user.email } }
 			}
 		});
-		
+
 		// const input = {author: MessageAuthor.HUMAN, text: message}
 		// const output = {author: MessageAuthor.AI, text: 'Dies ist ein Beispieltext'}
 
@@ -85,9 +94,14 @@ export const actions: Actions = {
 		const session = await isAuthenticated(locals);
 		isAuthorized(session, Permission.OPENAI);
 
-		const { chatId } = await parseFormData(request, deleteChatFormData);
+		const formData = await parseFormData(request, deleteChatFormData);
+		if (formData instanceof ZodError) return fail(422, formData.formErrors);
+
+		const { email } = session.user;
+		const { chatId } = formData;
+
 		await prisma.user.update({
-			where: { email: session.user.email },
+			where: { email },
 			data: {
 				chats: {
 					delete: { id: chatId },

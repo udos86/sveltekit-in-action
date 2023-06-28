@@ -4,9 +4,8 @@
 	export let href: string;
 	export let title: string;
 
-	function isActive(pathname: string) {
-		return href === '/' ? href === pathname : pathname.includes(href);
-	}
+	$: pathname = $page.url.pathname;
+	$: isActive = href === '/' ? href === pathname : pathname.includes(href);
 </script>
 
-<a {href} class="nav-link" class:active={isActive($page.url.pathname)}>{title}</a>
+<a {href} class="nav-link" class:active={isActive}>{title}</a>
