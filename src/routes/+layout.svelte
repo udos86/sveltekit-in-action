@@ -54,9 +54,9 @@
 
 	<nav class="space-x-1">
 		<NavLink href="/" title="Home" />
-		<NavLink href="/todos" title="Todos" />
+		<!--NavLink href="/todos" title="Todos" /-->
 		<NavLink href="/openai" title="OpenAI" />
-		<NavLink href="/upload" title="File Upload" />
+		<!--NavLink href="/upload" title="File Upload" /-->
 	</nav>
 </header>
 
