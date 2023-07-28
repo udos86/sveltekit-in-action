@@ -9,10 +9,13 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		serviceWorker: {
-			register: false,
+			register: false
 		},
 		files: {
-			serviceWorker: 'src/sw.ts',
+			serviceWorker: 'src/sw.ts'
+		},
+		version: {
+			pollInterval: 120000
 		}
 	}
 };

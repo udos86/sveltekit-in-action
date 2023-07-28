@@ -1,12 +1,12 @@
-import { isAuthenticated, isAuthorized } from "$lib/auth";
-import { prisma } from "$lib/prisma";
-import { Permission } from "@prisma/client";
-import { error, redirect, type Actions } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import { isAuthenticated, isAuthorized } from '$lib/auth';
+import { prisma } from '$lib/prisma';
+import { Permission } from '@prisma/client';
+import { error, redirect, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = (async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
 	const session = await isAuthenticated(locals);
-	await isAuthorized(session, Permission.OPENAI)
+	await isAuthorized(session, Permission.OPENAI);
 
 	const user = await prisma.user.findUnique({
 		where: { email: session.user.email },
@@ -18,7 +18,7 @@ export const load: PageServerLoad = (async ({ locals }) => {
 	}
 
 	return { chats: user.chats };
-});
+};
 
 export const actions: Actions = {
 	new: async ({ locals }) => {
@@ -31,7 +31,7 @@ export const actions: Actions = {
 				user: {
 					connect: { email: session.user.email }
 				}
-			},
+			}
 		});
 
 		throw redirect(302, `/openai/${chat.id}`);

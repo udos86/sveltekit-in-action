@@ -1,38 +1,30 @@
 {
-    // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
-    // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
-    // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Server",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run-script",
-                "dev"
-            ],
-            "console": "integratedTerminal"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Browser",
-            "url": "http://localhost:5173",
-            "webRoot": "${workspaceFolder}"
-        }
-    ],
-    "compounds": [
-        {
-            "name": "Launch Server & Browser",
-            "configurations": [
-                "Launch Server",
-                "Launch Browser"
-            ]
-        }
-    ]
+	// Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+	// Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+	// Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Launch Server",
+			"skipFiles": ["<node_internals>/**"],
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run-script", "dev"],
+			"console": "integratedTerminal"
+		},
+		{
+			"type": "chrome",
+			"request": "launch",
+			"name": "Launch Browser",
+			"url": "http://localhost:5173",
+			"webRoot": "${workspaceFolder}"
+		}
+	],
+	"compounds": [
+		{
+			"name": "Launch Server & Browser",
+			"configurations": ["Launch Server", "Launch Browser"]
+		}
+	]
 }

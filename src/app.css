@@ -3,59 +3,60 @@
 @tailwind utilities;
 
 @layer components {
+	h1 {
+		@apply text-2xl text-center uppercase leading-snug font-bold;
+	}
 
-  h1 {
-    @apply text-2xl text-center uppercase leading-snug font-bold
-  }
+	h2 {
+		@apply text-xl text-center font-bold;
+	}
 
-  h2 {
-    @apply text-xl text-center font-bold 
-  }
+	button,
+	a.as-button {
+		@apply text-white font-bold py-2 px-4 rounded;
+	}
 
-  button, a.as-button {
-    @apply text-white font-bold py-2 px-4 rounded
-  }
+	.icon-button {
+		@apply text-black p-2;
+	}
 
-  .icon-button {
-    @apply text-black p-2
-  }
+	.primary-button {
+		@apply text-white bg-sky-600 hover:bg-sky-800;
+	}
 
-  .primary-button {
-    @apply text-white bg-sky-600 hover:bg-sky-800
-  }
+	.danger-button {
+		@apply text-white bg-red-600 hover:bg-red-800;
+	}
 
-  .danger-button {
-    @apply text-white bg-red-600 hover:bg-red-800
-  }
+	.nav-link {
+		@apply inline-block font-bold p-2;
+	}
 
-  .nav-link {
-    @apply inline-block font-bold p-2;
-  }
-
-  .nav-link.active {
-    @apply border-b-4 border-sky-600;
-  }
+	.nav-link.active {
+		@apply border-b-4 border-sky-600;
+	}
 }
 
 .done-todo {
-  @apply line-through decoration-blue-700;
+	@apply line-through decoration-blue-700;
 }
 
 @keyframes cursor-blink {
-  from, to {
-    background-color: transparent;
-  }
-  50% {
-    background-color: black;
-  }
+	from,
+	to {
+		background-color: transparent;
+	}
+	50% {
+		background-color: black;
+	}
 }
 
 .cursor-blink::after {
-  content: '';
-  width: 2px;
-  height: 16px;
-  background: black;
-  margin: 0 0.125rem;
-  display: inline-block;
-  animation: cursor-blink 1s step-end infinite;
+	content: '';
+	width: 2px;
+	height: 16px;
+	background: black;
+	margin: 0 0.125rem;
+	display: inline-block;
+	animation: cursor-blink 1s step-end infinite;
 }

@@ -1,3 +1,7 @@
-<h1 class="p-3">Welcome to SvelteKit</h1>
+<script lang="ts">
+	import { VERSION } from '@sveltejs/kit';
+</script>
 
-<img src="/svelte_logo.png" alt="Svelte Logo" width="199" height="240" class="self-center" />
+<h1 class="p-3">This is SvelteKit {VERSION}</h1>
+
+<img src="/svelte_logo.png" alt="Svelte Logo" width="100" height="120" class="self-center" />

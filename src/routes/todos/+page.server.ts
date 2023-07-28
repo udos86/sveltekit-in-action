@@ -4,11 +4,11 @@ import { isAuthenticated } from '$lib/auth';
 
 const url = '/api/todos';
 
-export const load: PageServerLoad = (async ({ fetch, locals }) => {
-  await isAuthenticated(locals);
+export const load: PageServerLoad = async ({ fetch, locals }) => {
+	await isAuthenticated(locals);
 
-  const response = await fetch(url);
-  const todos = await response.json();
+	const response = await fetch(url);
+	const todos = await response.json();
 
-  return { todos };
-});
+	return { todos };
+};

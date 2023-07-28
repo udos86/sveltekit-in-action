@@ -3,6 +3,8 @@
 	import { fade } from 'svelte/transition';
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { pwaInfo } from 'virtual:pwa-info';
+	import { beforeNavigate } from '$app/navigation';
+	import { updated } from '$app/stores';
 	import NavLink from '$lib/ui/nav-link.svelte';
 	import type { LayoutData } from './$types';
 	import '../app.css';
@@ -12,6 +14,15 @@
 	let PWAPrompt: ConstructorOfATypedSvelteComponent | undefined;
 
 	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
+
+	// reload app when a new version was deployed while using it
+	// see https://kit.svelte.dev/docs/configuration#version
+	// see https://github.com/sveltejs/kit/blob/f7c0246a1dee8050b8a5defee86eb7c90242c692/packages/kit/src/runtime/client/utils.js#L233
+	beforeNavigate(({ willUnload, to }) => {
+		if ($updated && !willUnload && to?.url instanceof URL) {
+			location.href = to.url.href;
+		}
+	});
 
 	onMount(async () => {
 		if (pwaInfo !== undefined) {
@@ -45,9 +56,13 @@
 				<strong>{data.session.user?.name}</strong>
 			{/if}
 			<!--a href="/auth/signout">Sign out</a-->
-			<button type="button" class="primary-button z-10" on:click={onSignOutButtonClicked}>Sign out</button>
+			<button type="button" class="primary-button z-10" on:click={onSignOutButtonClicked}
+				>Sign out</button
+			>
 		{:else}
-			<button type="button" class="primary-button z-10" on:click={onSignInButtonClicked}>Sign In</button>
+			<button type="button" class="primary-button z-10" on:click={onSignInButtonClicked}
+				>Sign In</button
+			>
 			<!--a href="/auth/signin">Sign in</a-->
 		{/if}
 	</div>

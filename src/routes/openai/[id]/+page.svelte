@@ -117,7 +117,12 @@
 		<input type="submit" hidden />
 	</form>
 
-	<button type="button" class="icon-button" popovertarget="deleteChatDialog" popovertargetaction="show">
+	<button
+		type="button"
+		class="icon-button"
+		popovertarget="deleteChatDialog"
+		popovertargetaction="show"
+	>
 		<Icon name="trash" />
 	</button>
 </header>

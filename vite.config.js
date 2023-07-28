@@ -13,7 +13,7 @@ const config = {
 	define: {
 		__BUILD_DATE__: `'${new Date().toISOString()}'`,
 		__PERIODIC_UPDATE_SW__: false,
-		'process.env.NODE_ENV': process.env.NODE_ENV === 'production' ? '"production"' : '"development"',
+		'process.env.NODE_ENV': process.env.NODE_ENV === 'production' ? '"production"' : '"development"'
 	},
 	plugins: [
 		sveltekit(),
@@ -31,9 +31,9 @@ const config = {
 				start_url: '/',
 				scope: '/',
 				display: 'standalone',
-				theme_color: "#ffffff",
-				background_color: "#ffffff",
-				icons: [],
+				theme_color: '#ffffff',
+				background_color: '#ffffff',
+				icons: []
 			},
 			injectManifest: {
 				globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}']
@@ -44,7 +44,7 @@ const config = {
 			devOptions: {
 				enabled: false,
 				type: 'module',
-				navigateFallback: '/',
+				navigateFallback: '/'
 			}
 		})
 	],

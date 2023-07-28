@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Todo } from '@prisma/client';
 
-	// explicit set undefined to make prop optional without warnings 
+	// explicit set undefined to make prop optional without warnings
 	// see https://github.com/sveltejs/svelte/issues/4893
 	export let todo: Todo | undefined = undefined;
 

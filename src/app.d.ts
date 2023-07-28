@@ -5,13 +5,12 @@
 /// <reference types="vite-plugin-pwa/client" />
 /// <reference types="vite-plugin-pwa/info" />
 
-declare const __BUILD_DATE__: string
-declare const __PERIODIC_UPDATE_SW__: boolean
+declare const __BUILD_DATE__: string;
+declare const __PERIODIC_UPDATE_SW__: boolean;
 
 declare namespace App {
 	// interface Error {}
-	interface Locals {
-	}
+	interface Locals {}
 	// interface PageData {}
 	// interface Platform {}
 }

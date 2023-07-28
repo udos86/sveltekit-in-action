@@ -1,19 +1,23 @@
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { HumanChatMessage } from "langchain/schema";
-import { isAuthorized, isAuthenticated } from "$lib/auth";
-import { MessageAuthor, Permission } from "@prisma/client";
-import { prisma } from "$lib/prisma";
-import { error, fail, redirect, type Actions } from "@sveltejs/kit";
-import { parseFormData } from "$lib/validation";
-import { ZodError } from "zod";
-import { editChatNameFormData, addChatMessageFormData, deleteChatFormData } from "$lib/validation/chat";
-import type { PageServerLoad } from "./$types";
+import { ChatOpenAI } from 'langchain/chat_models/openai';
+import { HumanChatMessage } from 'langchain/schema';
+import { isAuthorized, isAuthenticated } from '$lib/auth';
+import { MessageAuthor, Permission } from '@prisma/client';
+import { prisma } from '$lib/prisma';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { parseFormData } from '$lib/validation';
+import { ZodError } from 'zod';
+import {
+	editChatNameFormData,
+	addChatMessageFormData,
+	deleteChatFormData
+} from '$lib/validation/chat';
+import type { PageServerLoad } from './$types';
 
 const chat = new ChatOpenAI();
 
-export const load: PageServerLoad = (async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ locals, params }) => {
 	const session = await isAuthenticated(locals);
-	isAuthorized(session, Permission.OPENAI)
+	isAuthorized(session, Permission.OPENAI);
 
 	const chat = await prisma.chat.findFirst({
 		where: { id: params.id, user: { email: session.user.email } },
@@ -25,7 +29,7 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
 	}
 
 	return { chat };
-});
+};
 
 export const actions: Actions = {
 	title: async ({ locals, request }) => {
@@ -61,7 +65,7 @@ export const actions: Actions = {
 		if (formData instanceof ZodError) return fail(422, formData.formErrors);
 
 		const { chatId, message } = formData;
-
+		
 		const response = await chat.call([
 			new HumanChatMessage(message)
 		]);
@@ -83,10 +87,11 @@ export const actions: Actions = {
 				user: { connect: { email: session.user.email } }
 			}
 		});
-
-		// const input = {author: MessageAuthor.HUMAN, text: message}
-		// const output = {author: MessageAuthor.AI, text: 'Dies ist ein Beispieltext'}
-
+		
+		/*
+		const input = { author: MessageAuthor.HUMAN, text: message };
+		const output = { author: MessageAuthor.AI, text: 'Dies ist ein Beispieltext' };
+		*/
 		return { action: 'ask', messages: [input, output] };
 	},
 
@@ -104,8 +109,8 @@ export const actions: Actions = {
 			where: { email },
 			data: {
 				chats: {
-					delete: { id: chatId },
-				},
+					delete: { id: chatId }
+				}
 			},
 			include: {
 				chats: {}
@@ -113,5 +118,5 @@ export const actions: Actions = {
 		});
 
 		throw redirect(302, `/openai`);
-	},
+	}
 };
