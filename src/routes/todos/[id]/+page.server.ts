@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ fetch, locals, params }) => {
 	const data: Todo | Error = await response.json();
 
 	if (!response.ok) {
-		throw error(response.status, { message: (data as Error).message });
+		error(response.status, { message: (data as Error).message });
 	}
 
 	return { todo: data as Todo };
@@ -32,6 +32,6 @@ export const actions: Actions = {
 
 		await fetch(`${url}/${todoId}`, { method: 'DELETE' });
 
-		throw redirect(302, '/todos');
+		redirect(302, '/todos');
 	}
 };

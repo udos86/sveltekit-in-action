@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 	});
 
 	if (user === null) {
-		throw error(404, { message: `Unknown user` });
+		error(404, { message: `Unknown user` });
 	}
 
 	return json(user.todos);

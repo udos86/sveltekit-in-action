@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	});
 
 	if (chat === null) {
-		throw error(404, { message: `Chat with id ${params.id} not found` });
+		error(404, { message: `Chat with id ${params.id} not found` });
 	}
 
 	return { chat };
@@ -111,6 +111,6 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, `/openai`);
+		redirect(302, `/openai`);
 	}
 };

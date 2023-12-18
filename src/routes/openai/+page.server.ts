@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	});
 
 	if (user === null) {
-		throw error(404, { message: `Unknown user` });
+		error(404, { message: `Unknown user` });
 	}
 
 	return { chats: user.chats };
@@ -34,6 +34,6 @@ export const actions: Actions = {
 			}
 		});
 
-		throw redirect(302, `/openai/${chat.id}`);
+		redirect(302, `/openai/${chat.id}`);
 	}
 };

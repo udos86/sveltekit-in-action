@@ -6,7 +6,7 @@ export const isAuthenticated = async (locals: App.Locals): Promise<Session & { u
 	const session = await locals.getSession();
 
 	if (session === null || session.user === undefined || session.user.email === null) {
-		throw error(401, { message: 'You are not logged in.' });
+		error(401, { message: 'You are not logged in.' });
 	}
 
 	return session as Session & { user: { email: string } };
@@ -17,5 +17,5 @@ export const isAuthorized = (session: Session, permission: Permission): boolean 
 		return true;
 	}
 
-	throw error(403, { message: 'You do not have the permission.' });
+	error(403, { message: 'You do not have the permission.' });
 };

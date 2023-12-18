@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ fetch, locals, params }) => {
 
 	if (!response.ok) {
 		const message = (data as Error).message;
-		throw error(response.status, { message });
+		error(response.status, { message });
 	}
 
 	return { todo: data as Todo };
