@@ -8,7 +8,6 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 		const blob = formData.get('file') as Blob;
-		console.log(blob.type);
 		const stream = blob.stream();
 
 		/*

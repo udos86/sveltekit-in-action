@@ -2,9 +2,7 @@ import { error } from '@sveltejs/kit';
 import type { Session } from '@auth/core/types';
 import type { Permission } from '@prisma/client';
 
-export const isAuthenticated = async (
-	locals: App.Locals
-): Promise<Session & { user: { email: string } }> | never => {
+export const isAuthenticated = async (locals: App.Locals): Promise<Session & { user: { email: string } }> | never => {
 	const session = await locals.getSession();
 
 	if (session === null || session.user === undefined || session.user.email === null) {

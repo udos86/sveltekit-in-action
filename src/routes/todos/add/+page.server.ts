@@ -1,9 +1,9 @@
-import type { Prisma } from '@prisma/client';
 import { fail } from '@sveltejs/kit';
 import { ZodError } from 'zod';
 import { isAuthenticated } from '$lib/auth';
 import { parseFormData } from '$lib/validation';
 import { addTodoFormData } from '$lib/validation/todos';
+import type { Prisma } from '@prisma/client';
 import type { PageServerLoad } from '../$types';
 import type { Actions } from './$types';
 

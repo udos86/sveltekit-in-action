@@ -10,11 +10,8 @@
 
 <form method="POST" action="?/upload" enctype="multipart/form-data" use:enhance>
 	<input type="file" name="file" class:hidden={browser} bind:this={fileInput} />
-	<button
-		type="button"
-		class="primary-button"
-		class:hidden={!browser}
-		on:click={() => fileInput.click()}>Pick File</button
+	<button type="button" class="primary-button" class:hidden={!browser} on:click={() => fileInput.click()}
+		>Pick File</button
 	>
 	<button class="primary-button">Send</button>
 </form>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { SvelteComponent, onMount, type ComponentType } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { pwaInfo } from 'virtual:pwa-info';
@@ -11,7 +11,7 @@
 
 	export let data: LayoutData;
 
-	let PWAPrompt: ConstructorOfATypedSvelteComponent | undefined;
+	let PWAPrompt: ComponentType<SvelteComponent> | undefined;
 
 	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 
@@ -56,13 +56,9 @@
 				<strong>{data.session.user?.name}</strong>
 			{/if}
 			<!--a href="/auth/signout">Sign out</a-->
-			<button type="button" class="primary-button z-10" on:click={onSignOutButtonClicked}
-				>Sign out</button
-			>
+			<button type="button" class="primary-button z-10" on:click={onSignOutButtonClicked}>Sign out</button>
 		{:else}
-			<button type="button" class="primary-button z-10" on:click={onSignInButtonClicked}
-				>Sign In</button
-			>
+			<button type="button" class="primary-button z-10" on:click={onSignInButtonClicked}>Sign In</button>
 			<!--a href="/auth/signin">Sign in</a-->
 		{/if}
 	</div>
@@ -77,11 +73,7 @@
 
 <main class="flex-auto min-h-0">
 	{#key data.pathname}
-		<div
-			class="flex flex-col min-h-0 h-full"
-			in:fade={{ duration: 300, delay: 300 }}
-			out:fade={{ duration: 300 }}
-		>
+		<div class="flex flex-col min-h-0 h-full" in:fade={{ duration: 300, delay: 300 }} out:fade={{ duration: 300 }}>
 			<slot />
 		</div>
 	{/key}

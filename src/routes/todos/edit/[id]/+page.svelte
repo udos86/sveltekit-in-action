@@ -7,7 +7,7 @@
 	export let data: PageData;
 	export let form: ActionData;
 
-	const onSubmit: SubmitFunction = ({}) => {
+	const onSubmit: SubmitFunction = () => {
 		return async ({ update }) => {
 			update({ reset: false });
 		};

@@ -22,11 +22,8 @@
 	<footer class="flex justify-end py-2 space-x-2">
 		<form method="POST" action={formAction} use:enhance>
 			<input type="hidden" name={hiddenFieldName} value={hiddenFieldValue} />
-			<button
-				class="danger-button"
-				popovertarget={id}
-				popovertargetaction="hide"
-				on:click={() => dispatch('confirm')}><slot name="confirmButtonLabel">Confirm</slot></button
+			<button class="danger-button" popovertarget={id} popovertargetaction="hide" on:click={() => dispatch('confirm')}
+				><slot name="confirmButtonLabel">Confirm</slot></button
 			>
 		</form>
 		<button

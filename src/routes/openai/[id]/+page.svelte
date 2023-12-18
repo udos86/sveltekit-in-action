@@ -117,12 +117,7 @@
 		<input type="submit" hidden />
 	</form>
 
-	<button
-		type="button"
-		class="icon-button"
-		popovertarget="deleteChatDialog"
-		popovertargetaction="show"
-	>
+	<button type="button" class="icon-button" popovertarget="deleteChatDialog" popovertargetaction="show">
 		<Icon name="trash" />
 	</button>
 </header>
@@ -140,13 +135,7 @@
 				/>
 			{/if}
 			{#if message.author === MessageAuthor.AI}
-				<img
-					width="24"
-					height="24"
-					src="/logo_chatgpt.svg"
-					alt="avatar"
-					class="rounded-full border border-slate-500"
-				/>
+				<img width="24" height="24" src="/logo_chatgpt.svg" alt="avatar" class="rounded-full border border-slate-500" />
 			{/if}
 			{#if message.id === pendingAiMessageId}
 				{#key message.text}

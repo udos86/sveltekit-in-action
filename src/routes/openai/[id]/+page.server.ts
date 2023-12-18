@@ -1,16 +1,12 @@
 import { ChatOpenAI } from 'langchain/chat_models/openai';
-import { HumanChatMessage } from 'langchain/schema';
+import { HumanMessage } from 'langchain/schema';
 import { isAuthorized, isAuthenticated } from '$lib/auth';
 import { MessageAuthor, Permission } from '@prisma/client';
 import { prisma } from '$lib/prisma';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { parseFormData } from '$lib/validation';
 import { ZodError } from 'zod';
-import {
-	editChatNameFormData,
-	addChatMessageFormData,
-	deleteChatFormData
-} from '$lib/validation/chat';
+import { editChatNameFormData, addChatMessageFormData, deleteChatFormData } from '$lib/validation/chat';
 import type { PageServerLoad } from './$types';
 
 const chat = new ChatOpenAI();
@@ -65,10 +61,8 @@ export const actions: Actions = {
 		if (formData instanceof ZodError) return fail(422, formData.formErrors);
 
 		const { chatId, message } = formData;
-		
-		const response = await chat.call([
-			new HumanChatMessage(message)
-		]);
+
+		const response = await chat.call([new HumanMessage(message)]);
 
 		const input = await prisma.message.create({
 			data: {
@@ -81,13 +75,13 @@ export const actions: Actions = {
 
 		const output = await prisma.message.create({
 			data: {
-				text: response.text,
+				text: response.content,
 				author: MessageAuthor.AI,
 				chat: { connect: { id: chatId } },
 				user: { connect: { email: session.user.email } }
 			}
 		});
-		
+
 		/*
 		const input = { author: MessageAuthor.HUMAN, text: message };
 		const output = { author: MessageAuthor.AI, text: 'Dies ist ein Beispieltext' };
