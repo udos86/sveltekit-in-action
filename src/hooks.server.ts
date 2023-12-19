@@ -31,7 +31,7 @@ export const handle = sequence(
 		callbacks: {
 			session(params) {
 				const { session, user } = params;
-				
+
 				if (session.user !== undefined) {
 					session.user.permissions = user.permissions;
 				}

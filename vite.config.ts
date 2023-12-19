@@ -1,8 +1,8 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vitest/config';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 
-/** @type {import('vite').UserConfig} */
-const config = {
+export default defineConfig({
 	resolve: {
 		alias: {
 			// fixed Prisma bundling bug when importing enums
@@ -51,6 +51,4 @@ const config = {
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}
-};
-
-export default config;
+});
