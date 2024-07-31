@@ -9,9 +9,9 @@ export interface TypewriterParams {
 
 export function typewriter(node: Element, params?: TypewriterParams): TransitionConfig {
 	const { childNodes } = node;
-	const hasTextNode = childNodes.length === 1 && childNodes[0].nodeType === Node.TEXT_NODE;
+	const hasSingleTextNode = childNodes.length === 1 && childNodes[0].nodeType === Node.TEXT_NODE;
 
-	if (!params?.text === undefined && !hasTextNode) {
+	if (!(params?.text === undefined) && !hasSingleTextNode) {
 		throw new Error(`Typewriter transition only works on elements with a single text node child`);
 	}
 

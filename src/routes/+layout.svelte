@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { SvelteComponent, onMount, type ComponentType } from 'svelte';
+	// import { SvelteComponent, onMount, type ComponentType } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { signIn, signOut } from '@auth/sveltekit/client';
-	import { pwaInfo } from 'virtual:pwa-info';
+	// import { pwaInfo } from 'virtual:pwa-info';
 	import { beforeNavigate } from '$app/navigation';
 	import { updated } from '$app/stores';
 	import NavLink from '$lib/ui/nav-link.svelte';
@@ -11,9 +11,9 @@
 
 	export let data: LayoutData;
 
-	let PWAPrompt: ComponentType<SvelteComponent> | undefined;
+	// let PWAPrompt: ComponentType<SvelteComponent> | undefined;
 
-	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
+	// $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 
 	// reload app when a new version was deployed while using it
 	// see https://kit.svelte.dev/docs/configuration#version
@@ -23,21 +23,21 @@
 			location.href = to.url.href;
 		}
 	});
-
+	/*
 	onMount(async () => {
 		if (pwaInfo !== undefined) {
 			// Prompt needs to be importet dynamically on the client-side due to SSR/SSG
 			PWAPrompt = (await import('$lib/pwa/Prompt.svelte')).default;
 		}
 	});
-
+	*/
 	const onSignInButtonClicked = () => signIn();
 	const onSignOutButtonClicked = () => signOut();
 </script>
 
-<svelte:head>
+<!--svelte:head>
 	{@html webManifest}
-</svelte:head>
+</svelte:head-->
 
 <header class="flex flex-col px-3 pt-2 border-b border-gray-300">
 	<div class="flex justify-end items-center space-x-3 overflow-hidden">
@@ -78,7 +78,8 @@
 		</div>
 	{/key}
 </main>
-
+<!--
 {#if PWAPrompt}
 	<svelte:component this={PWAPrompt} />
 {/if}
+-->

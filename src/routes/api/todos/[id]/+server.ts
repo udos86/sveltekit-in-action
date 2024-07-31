@@ -37,7 +37,7 @@ export const PUT: RequestHandler = async ({ locals, params, request }) => {
 			}
 		});
 		return new Response();
-	} catch (err) {
+	} catch {
 		error(404, { message: `Todo with id ${params.id} not found` });
 	}
 };
@@ -54,7 +54,7 @@ export const DELETE: RequestHandler = async ({ locals, params }) => {
 				}
 			}
 		});
-	} catch (err) {
+	} catch {
 		error(404, { message: `Todo with id ${params.id} not found` });
 	}
 

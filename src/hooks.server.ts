@@ -1,12 +1,10 @@
-import { sequence } from '@sveltejs/kit/hooks';
-import GitHub from '@auth/core/providers/github';
 import { SvelteKitAuth } from '@auth/sveltekit';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { prisma } from '$lib/prisma';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import GitHub from '@auth/core/providers/github';
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '$env/static/private';
+import { prisma } from '$lib/prisma';
 
-export const handle = sequence(
-	SvelteKitAuth({
+export const { handle, signIn, signOut } = SvelteKitAuth({
 		trustHost: true,
 		adapter: PrismaAdapter(prisma),
 		session: {
@@ -29,15 +27,14 @@ export const handle = sequence(
 			})
 		],
 		callbacks: {
-			session(params) {
+			async session(params) {
 				const { session, user } = params;
 
-				if (session.user !== undefined) {
+				if (session.user !== undefined && params) {
 					session.user.permissions = user.permissions;
 				}
 
 				return session;
 			}
 		}
-	})
-);
+	});

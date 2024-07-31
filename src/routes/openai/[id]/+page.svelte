@@ -3,7 +3,8 @@
 	import { MessageAuthor } from '@prisma/client';
 	import { enhance } from '$app/forms';
 	import { typewriter } from '$lib/anim';
-	import Dialog from '$lib/ui/dialog.svelte';
+	import ActionDialog from '$lib/ui/action-dialog.svelte';
+	import PageHeader from '$lib/ui/page-header.svelte';
 	import Icon from '$lib/ui/icon.svelte';
 	import type { Message } from '@prisma/client';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -13,7 +14,9 @@
 
 	export let data: PageData;
 
-	let chat: PartialMessage[] = [...data.chat.messages];
+	let chat: PartialMessage[];
+	// make chat reactive to trigger update when load functions are invalidated
+	$: chat = [...data.chat.messages];
 	let chatElement: HTMLUListElement;
 	let formPending = false;
 	let pendingAiMessageId: string | null = null;
@@ -92,35 +95,38 @@
 	}
 </script>
 
-<Dialog
-	id="deleteChatDialog"
-	state="manual"
-	formAction="?/delete"
-	hiddenFieldName="chatId"
-	hiddenFieldValue={data.chat.id}
->
+<ActionDialog id="deleteChatDialog" state="manual" action="?/delete">
 	<h2 slot="header">Delete Chat</h2>
-	<p>Would you really like to delete this chat?</p>
-</Dialog>
 
-<header class="flex p-3 border-b border-gray-300">
-	<form method="POST" action="?/title" class="self-center text-center grow" use:enhance>
+	<p>Would really like to delete this chat?</p>
+
+	<svelte:fragment slot="form">
 		<input type="hidden" name="chatId" value={data.chat.id} />
-		<label for="chatName" class="hidden">Chat Title</label>
-		<input
-			type="text"
-			name="name"
-			id="chatName"
-			class="text-xl text-center p-0 font-bold w-full border-0 focus:ring-0 focus:ring-offset-0"
-			value={data.chat.name}
-		/>
-		<input type="submit" hidden />
-	</form>
+	</svelte:fragment>
+</ActionDialog>
 
-	<button type="button" class="icon-button" popovertarget="deleteChatDialog" popovertargetaction="show">
-		<Icon name="trash" />
-	</button>
-</header>
+<PageHeader>
+	<svelte:fragment slot="title">
+		<form method="POST" action="?/title" class="self-center text-center grow" use:enhance>
+			<input type="hidden" name="chatId" value={data.chat.id} />
+			<label for="chatName" class="hidden">Chat Title</label>
+			<input
+				type="text"
+				name="name"
+				id="chatName"
+				class="text-xl text-center p-0 font-bold w-full border-0 focus:ring-0 focus:ring-offset-0"
+				value={data.chat.name}
+			/>
+			<input type="submit" hidden />
+		</form>
+	</svelte:fragment>
+
+	<svelte:fragment slot="end">
+		<button type="button" class="icon-button" popovertarget="deleteChatDialog" popovertargetaction="show">
+			<Icon name="trash" />
+		</button>
+	</svelte:fragment>
+</PageHeader>
 
 <ul class="grow divide-y divide-gray-300 overflow-y-auto shadow-inner" bind:this={chatElement}>
 	{#each chat as message (message.id)}

@@ -17,7 +17,7 @@ export const actions: Actions = {
 
 		let text = '';
 
-		//@ts-ignore
+		//@ts-expect-error
 		// ReadableStream is not typed as async iterable in Node.js
 		// see https://github.com/microsoft/TypeScript/issues/39051
 		for await (const chunk of stream) {

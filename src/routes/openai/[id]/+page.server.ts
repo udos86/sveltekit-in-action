@@ -1,15 +1,20 @@
-import { ChatOpenAI } from 'langchain/chat_models/openai';
-import { HumanMessage } from 'langchain/schema';
-import { isAuthorized, isAuthenticated } from '$lib/auth';
-import { MessageAuthor, Permission } from '@prisma/client';
-import { prisma } from '$lib/prisma';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
-import { parseFormData } from '$lib/validation';
+import { MessageAuthor, Permission } from '@prisma/client';
+import { ChatOpenAI } from '@langchain/openai';
+import { HumanMessage } from '@langchain/core/messages';
 import { ZodError } from 'zod';
+
+import { OPENAI_API_KEY } from '$env/static/private';
+import { isAuthorized, isAuthenticated } from '$lib/auth';
+import { prisma } from '$lib/prisma';
+import { parseFormData } from '$lib/validation';
 import { editChatNameFormData, addChatMessageFormData, deleteChatFormData } from '$lib/validation/chat';
+
 import type { PageServerLoad } from './$types';
 
-const chat = new ChatOpenAI();
+const chat = new ChatOpenAI({
+	apiKey: OPENAI_API_KEY
+});
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const session = await isAuthenticated(locals);
